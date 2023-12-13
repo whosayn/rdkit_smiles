@@ -53,7 +53,7 @@
 #  endif
 # endif
 
-#line 4 "smiles_grammar.yy"
+#line 5 "smiles_grammar.yy"
 namespace smiles_parser {
 #line 59 "location.hh"
 
@@ -299,7 +299,7 @@ namespace smiles_parser {
     return ostr;
   }
 
-#line 4 "smiles_grammar.yy"
+#line 5 "smiles_grammar.yy"
 } // smiles_parser
 #line 305 "location.hh"
 

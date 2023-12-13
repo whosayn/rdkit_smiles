@@ -42,7 +42,7 @@
 
 
 // Unqualified %code blocks.
-#line 26 "smiles_grammar.yy"
+#line 25 "smiles_grammar.yy"
 
 #include "smiles_scanner.h"
 #include "smiles_parser.h"
@@ -50,7 +50,9 @@
 #undef yylex
 #define yylex token_scanner.lex
 
-#line 54 "smiles_grammar.cc"
+
+
+#line 56 "smiles_grammar.cc"
 
 
 #ifndef YY_
@@ -141,9 +143,9 @@
 #define YYERROR         goto yyerrorlab
 #define YYRECOVERING()  (!!yyerrstatus_)
 
-#line 4 "smiles_grammar.yy"
+#line 5 "smiles_grammar.yy"
 namespace smiles_parser {
-#line 147 "smiles_grammar.cc"
+#line 149 "smiles_grammar.cc"
 
   /// Build a parser object.
   SmilesTokenParser::SmilesTokenParser (SmilesTokenScanner& token_scanner_yyarg)
@@ -499,10 +501,10 @@ namespace smiles_parser {
 
 
     // User initialization code.
-#line 24 "smiles_grammar.yy"
+#line 23 "smiles_grammar.yy"
 { yyla.location.begin.column = 0; }
 
-#line 506 "smiles_grammar.cc"
+#line 508 "smiles_grammar.cc"
 
 
     /* Initialize the stack.  The initial state will be set in
@@ -637,7 +639,7 @@ namespace smiles_parser {
           switch (yyn)
             {
 
-#line 641 "smiles_grammar.cc"
+#line 643 "smiles_grammar.cc"
 
             default:
               break;
@@ -830,62 +832,109 @@ namespace smiles_parser {
 
 
 
-  const signed char SmilesTokenParser::yypact_ninf_ = -1;
+  const signed char SmilesTokenParser::yypact_ninf_ = -13;
 
   const signed char SmilesTokenParser::yytable_ninf_ = -1;
 
   const signed char
   SmilesTokenParser::yypact_[] =
   {
-       1,    -1,     2,     0,    -1,    -1,    -1
+      45,   -13,   -13,     2,    38,     9,   -13,    63,   -13,   -13,
+      -4,   -13,     1,    25,   -11,    34,    14,   -13,    45,   -13,
+      44,   -13,   -12,   -13,   -13,   -13,   -13,   -13,    50,    22,
+     -13,    33,    29,   -13,   -13,   -13,   -13,    39,   -13,    69,
+      70,   -13,    71,   -13,    -1,    30,    72,    73,    53,     9,
+      45,   -13,   -13,   -13,   -13,   -13,    76,   -13,   -13,    77,
+     -13,   -13,    58,   -13,   -13,   -13,   -13,   -13,   -13,   -13,
+     -13,    74,   -13,   -13,    56,   -13
   };
 
   const signed char
   SmilesTokenParser::yydefact_[] =
   {
-       0,     3,     0,     0,     1,     4,     2
+       0,    23,    24,     0,     0,     2,     4,     0,    48,    52,
+      34,    50,     0,     0,    27,    40,    43,     1,     0,    56,
+       0,    11,    12,    13,    14,    15,    16,    17,     0,    20,
+      22,     0,     0,     5,     7,    49,    53,    35,    51,     0,
+      36,    54,     0,    26,    31,    28,    41,    46,    44,     3,
+       0,     9,    18,    19,    21,    57,     0,     6,     8,    37,
+      55,    38,     0,    33,    32,    30,    29,    42,    47,    45,
+      10,     0,    39,    25,     0,    58
   };
 
   const signed char
   SmilesTokenParser::yypgoto_[] =
   {
-      -1,    -1,    -1
+     -13,   -13,    65,    64,    -5,   -13,   -13,   -13,   -13,    54
   };
 
   const signed char
   SmilesTokenParser::yydefgoto_[] =
   {
-       0,     2,     3
+       0,     4,     5,    32,     6,    13,    14,    15,    16,    34
   };
 
   const signed char
   SmilesTokenParser::yytable_[] =
   {
-       5,     1,     4,     6
+      33,    44,    63,    40,    41,     7,    52,     8,     9,    10,
+      11,    64,    19,    45,     1,    51,    12,     2,    47,    20,
+      21,    22,    23,    24,    25,    26,    27,    57,    28,    29,
+      30,     3,    19,    65,     1,    31,    55,     2,    17,    48,
+      42,    46,    54,    56,    33,    70,    59,    18,    43,     1,
+       1,     3,     2,     2,    66,    31,    22,    23,    24,    25,
+      26,    27,    53,    28,    29,    30,     3,     3,    35,    36,
+      37,    38,    60,    61,    62,    67,    68,    39,    69,    71,
+      72,    73,    75,    49,    50,    74,    58
   };
 
   const signed char
   SmilesTokenParser::yycheck_[] =
   {
-       0,     0,     0,     3
+       5,    12,     3,     7,     3,     3,    18,     5,     6,     7,
+       8,    12,     3,    24,     5,    20,    14,     8,     4,    10,
+      11,    12,    13,    14,    15,    16,    17,    32,    19,    20,
+      21,    22,     3,     3,     5,    26,     3,     8,     0,    25,
+      15,     7,    20,    10,    49,    50,     7,     9,    23,     5,
+       5,    22,     8,     8,    24,    26,    12,    13,    14,    15,
+      16,    17,    12,    19,    20,    21,    22,    22,     5,     6,
+       7,     8,     3,     3,     3,     3,     3,    14,    25,     3,
+       3,    23,    26,    18,    20,    11,    32
   };
 
   const signed char
   SmilesTokenParser::yystos_[] =
   {
-       0,     0,     5,     6,     0,     0,     3
+       0,     5,     8,    22,    28,    29,    31,     3,     5,     6,
+       7,     8,    14,    32,    33,    34,    35,     0,     9,     3,
+      10,    11,    12,    13,    14,    15,    16,    17,    19,    20,
+      21,    26,    30,    31,    36,     5,     6,     7,     8,    14,
+       7,     3,    15,    23,    12,    24,     7,     4,    25,    29,
+      30,    31,    18,    12,    20,     3,    10,    31,    36,     7,
+       3,     3,     3,     3,    12,     3,    24,     3,     3,    25,
+      31,     3,     3,    23,    11,    26
   };
 
   const signed char
   SmilesTokenParser::yyr1_[] =
   {
-       0,     4,     5,     6,     6
+       0,    27,    28,    28,    29,    29,    29,    29,    29,    29,
+      29,    29,    30,    30,    30,    30,    30,    30,    30,    30,
+      30,    30,    30,    31,    31,    31,    31,    32,    32,    32,
+      32,    32,    32,    32,    33,    33,    33,    33,    33,    33,
+      33,    33,    33,    34,    34,    34,    34,    34,    35,    35,
+      35,    35,    35,    35,    35,    35,    36,    36,    36
   };
 
   const signed char
   SmilesTokenParser::yyr2_[] =
   {
-       0,     2,     2,     1,     2
+       0,     2,     1,     3,     1,     2,     3,     2,     3,     3,
+       4,     2,     1,     1,     1,     1,     1,     1,     2,     2,
+       1,     2,     1,     1,     1,     5,     3,     1,     2,     3,
+       3,     2,     3,     3,     1,     2,     2,     3,     3,     4,
+       1,     2,     3,     1,     2,     3,     2,     3,     1,     2,
+       1,     2,     1,     2,     2,     3,     1,     2,     5
   };
 
 
@@ -895,16 +944,26 @@ namespace smiles_parser {
   const char*
   const SmilesTokenParser::yytname_[] =
   {
-  "NUM", "error", "\"invalid token\"", "EOS", "$accept", "ii", "input", YY_NULLPTR
+  "\"end of file\"", "error", "\"invalid token\"", "NUMBER", "CHIRAL_TAG",
+  "SIMPLE_ATOM", "NESTED_ATOM", "H_TOKEN", "ORGANIC_ATOM", "'.'", "'('",
+  "')'", "'-'", "'='", "'#'", "':'", "'$'", "'~'", "'>'", "'<'", "'\\\\'",
+  "'/'", "'['", "']'", "'+'", "'@'", "'%'", "$accept", "mols", "mol",
+  "bond", "atom", "charge_element", "h_element", "chiral_element",
+  "element", "ring_number", YY_NULLPTR
   };
 #endif
 
 
 #if YYDEBUG
-  const signed char
+  const unsigned char
   SmilesTokenParser::yyrline_[] =
   {
-       0,    40,    40,    42,    43
+       0,    47,    47,    48,    53,    54,    55,    56,    57,    58,
+      59,    60,    64,    65,    66,    67,    68,    69,    70,    71,
+      72,    73,    74,    78,    79,    80,    81,    85,    86,    87,
+      88,    89,    90,    91,    95,    96,    97,    98,    99,   100,
+     101,   102,   103,   107,   108,   109,   110,   111,   115,   116,
+     117,   118,   119,   120,   121,   122,   126,   127,   128
   };
 
   void
@@ -943,7 +1002,19 @@ namespace smiles_parser {
     const signed char
     translate_table[] =
     {
-       0,     3,     2,     2,     2,     2,     2,     2,     2,     2,
+       0,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,    14,    16,    26,     2,     2,
+      10,    11,     2,    24,     2,    12,     9,    21,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,    15,     2,
+      19,    13,    18,     2,    25,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,    22,    20,    23,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,    17,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -956,22 +1027,11 @@ namespace smiles_parser {
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     1,     2
+       2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
+       5,     6,     7,     8
     };
     // Last valid token kind.
-    const int code_max = 257;
+    const int code_max = 263;
 
     if (t <= 0)
       return symbol_kind::S_YYEOF;
@@ -981,11 +1041,11 @@ namespace smiles_parser {
       return symbol_kind::S_YYUNDEF;
   }
 
-#line 4 "smiles_grammar.yy"
+#line 5 "smiles_grammar.yy"
 } // smiles_parser
-#line 987 "smiles_grammar.cc"
+#line 1047 "smiles_grammar.cc"
 
-#line 45 "smiles_grammar.yy"
+#line 131 "smiles_grammar.yy"
 
 
 void smiles_parser::SmilesTokenParser::error(const location&, const std::string& msg) {

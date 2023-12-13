@@ -45,7 +45,7 @@
 #ifndef YY_YY_SMILES_GRAMMAR_HH_INCLUDED
 # define YY_YY_SMILES_GRAMMAR_HH_INCLUDED
 // "%code requires" blocks.
-#line 17 "smiles_grammar.yy"
+#line 16 "smiles_grammar.yy"
 
 namespace smiles_parser {
 class SmilesTokenScanner;
@@ -182,10 +182,10 @@ class SmilesTokenScanner;
 
 /* Debug traces.  */
 #ifndef YYDEBUG
-# define YYDEBUG 0
+# define YYDEBUG 1
 #endif
 
-#line 4 "smiles_grammar.yy"
+#line 5 "smiles_grammar.yy"
 namespace smiles_parser {
 #line 191 "smiles_grammar.hh"
 
@@ -428,10 +428,15 @@ namespace smiles_parser {
       enum token_kind_type
       {
         YYEMPTY = -2,
-    NUM = 0,                       // NUM
+    YYEOF = 0,                     // "end of file"
     YYerror = 256,                 // error
     YYUNDEF = 257,                 // "invalid token"
-    EOS = 1                        // EOS
+    NUMBER = 258,                  // NUMBER
+    CHIRAL_TAG = 259,              // CHIRAL_TAG
+    SIMPLE_ATOM = 260,             // SIMPLE_ATOM
+    NESTED_ATOM = 261,             // NESTED_ATOM
+    H_TOKEN = 262,                 // H_TOKEN
+    ORGANIC_ATOM = 263             // ORGANIC_ATOM
       };
       /// Backward compatibility alias (Bison 3.6).
       typedef token_kind_type yytokentype;
@@ -448,15 +453,45 @@ namespace smiles_parser {
     {
       enum symbol_kind_type
       {
-        YYNTOKENS = 4, ///< Number of tokens.
+        YYNTOKENS = 27, ///< Number of tokens.
         S_YYEMPTY = -2,
-        S_YYEOF = 0,                             // NUM
+        S_YYEOF = 0,                             // "end of file"
         S_YYerror = 1,                           // error
         S_YYUNDEF = 2,                           // "invalid token"
-        S_EOS = 3,                               // EOS
-        S_YYACCEPT = 4,                          // $accept
-        S_ii = 5,                                // ii
-        S_input = 6                              // input
+        S_NUMBER = 3,                            // NUMBER
+        S_CHIRAL_TAG = 4,                        // CHIRAL_TAG
+        S_SIMPLE_ATOM = 5,                       // SIMPLE_ATOM
+        S_NESTED_ATOM = 6,                       // NESTED_ATOM
+        S_H_TOKEN = 7,                           // H_TOKEN
+        S_ORGANIC_ATOM = 8,                      // ORGANIC_ATOM
+        S_9_ = 9,                                // '.'
+        S_10_ = 10,                              // '('
+        S_11_ = 11,                              // ')'
+        S_12_ = 12,                              // '-'
+        S_13_ = 13,                              // '='
+        S_14_ = 14,                              // '#'
+        S_15_ = 15,                              // ':'
+        S_16_ = 16,                              // '$'
+        S_17_ = 17,                              // '~'
+        S_18_ = 18,                              // '>'
+        S_19_ = 19,                              // '<'
+        S_20_ = 20,                              // '\\'
+        S_21_ = 21,                              // '/'
+        S_22_ = 22,                              // '['
+        S_23_ = 23,                              // ']'
+        S_24_ = 24,                              // '+'
+        S_25_ = 25,                              // '@'
+        S_26_ = 26,                              // '%'
+        S_YYACCEPT = 27,                         // $accept
+        S_mols = 28,                             // mols
+        S_mol = 29,                              // mol
+        S_bond = 30,                             // bond
+        S_atom = 31,                             // atom
+        S_charge_element = 32,                   // charge_element
+        S_h_element = 33,                        // h_element
+        S_chiral_element = 34,                   // chiral_element
+        S_element = 35,                          // element
+        S_ring_number = 36                       // ring_number
       };
     };
 
@@ -693,16 +728,16 @@ switch (yykind)
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_NUM (location_type l)
+      make_YYEOF (location_type l)
       {
-        return symbol_type (token::NUM, std::move (l));
+        return symbol_type (token::YYEOF, std::move (l));
       }
 #else
       static
       symbol_type
-      make_NUM (const location_type& l)
+      make_YYEOF (const location_type& l)
       {
-        return symbol_type (token::NUM, l);
+        return symbol_type (token::YYEOF, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
@@ -738,16 +773,91 @@ switch (yykind)
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_EOS (location_type l)
+      make_NUMBER (location_type l)
       {
-        return symbol_type (token::EOS, std::move (l));
+        return symbol_type (token::NUMBER, std::move (l));
       }
 #else
       static
       symbol_type
-      make_EOS (const location_type& l)
+      make_NUMBER (const location_type& l)
       {
-        return symbol_type (token::EOS, l);
+        return symbol_type (token::NUMBER, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_CHIRAL_TAG (location_type l)
+      {
+        return symbol_type (token::CHIRAL_TAG, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_CHIRAL_TAG (const location_type& l)
+      {
+        return symbol_type (token::CHIRAL_TAG, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_SIMPLE_ATOM (location_type l)
+      {
+        return symbol_type (token::SIMPLE_ATOM, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_SIMPLE_ATOM (const location_type& l)
+      {
+        return symbol_type (token::SIMPLE_ATOM, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_NESTED_ATOM (location_type l)
+      {
+        return symbol_type (token::NESTED_ATOM, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_NESTED_ATOM (const location_type& l)
+      {
+        return symbol_type (token::NESTED_ATOM, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_H_TOKEN (location_type l)
+      {
+        return symbol_type (token::H_TOKEN, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_H_TOKEN (const location_type& l)
+      {
+        return symbol_type (token::H_TOKEN, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_ORGANIC_ATOM (location_type l)
+      {
+        return symbol_type (token::ORGANIC_ATOM, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_ORGANIC_ATOM (const location_type& l)
+      {
+        return symbol_type (token::ORGANIC_ATOM, l);
       }
 #endif
 
@@ -827,7 +937,7 @@ switch (yykind)
 
 #if YYDEBUG
     // YYRLINE[YYN] -- Source line where rule number YYN was defined.
-    static const signed char yyrline_[];
+    static const unsigned char yyrline_[];
     /// Report on the debug stream that the rule \a r is going to be reduced.
     virtual void yy_reduce_print_ (int r) const;
     /// Print the state stack on the debug stream.
@@ -1054,9 +1164,9 @@ switch (yykind)
     /// Constants.
     enum
     {
-      yylast_ = 3,     ///< Last index in yytable_.
-      yynnts_ = 3,  ///< Number of nonterminal symbols.
-      yyfinal_ = 4 ///< Termination state number.
+      yylast_ = 86,     ///< Last index in yytable_.
+      yynnts_ = 10,  ///< Number of nonterminal symbols.
+      yyfinal_ = 17 ///< Termination state number.
     };
 
 
@@ -1066,9 +1176,9 @@ switch (yykind)
   };
 
 
-#line 4 "smiles_grammar.yy"
+#line 5 "smiles_grammar.yy"
 } // smiles_parser
-#line 1072 "smiles_grammar.hh"
+#line 1182 "smiles_grammar.hh"
 
 
 
