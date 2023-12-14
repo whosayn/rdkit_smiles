@@ -1028,13 +1028,12 @@ static const yy_state_type yy_NUL_trans[37] =
 #undef YY_DECL
 #define YY_DECL int smiles_parser::SmilesTokenScanner::lex(smiles_parser::SmilesTokenParser::semantic_type* const lval, smiles_parser::SmilesTokenParser::location_type* location)
 
-#define YY_USER_ACTION std::cout << location->begin.column << ":" << yyleng <<std::endl; \
-                       location->step(); location->columns(yyleng);
+#define YY_USER_ACTION location->step(); location->columns(yyleng);
 
     using token = smiles_parser::SmilesTokenParser::token_kind_type;
-#line 1035 "smiles_lexer.yy.cc"
+#line 1034 "smiles_lexer.yy.cc"
 
-#line 1037 "smiles_lexer.yy.cc"
+#line 1036 "smiles_lexer.yy.cc"
 
 #define INITIAL 0
 #define IN_ATOM_STATE 1
@@ -1167,11 +1166,11 @@ YY_DECL
 		}
 
 	{
-#line 25 "smiles_lexer.ll"
+#line 24 "smiles_lexer.ll"
 
 
 
-#line 1174 "smiles_lexer.yy.cc"
+#line 1173 "smiles_lexer.yy.cc"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1213,70 +1212,70 @@ do_action:	/* This label is used only to access EOF actions. */
 	{ /* beginning of action switch */
 case 1:
 YY_RULE_SETUP
-#line 28 "smiles_lexer.ll"
-{  std::cout << "any num:: " << yytext << std::endl; return token::NUMBER; }
+#line 27 "smiles_lexer.ll"
+{ return token::NUMBER; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 30 "smiles_lexer.ll"
-{ std::cout << "any h:: " << yytext << std::endl; return token::H_TOKEN; }
+#line 29 "smiles_lexer.ll"
+{ return token::H_TOKEN; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 31 "smiles_lexer.ll"
-{ std::cout << "any organic:: " << yytext << std::endl; return token::ORGANIC_ATOM; }
+#line 30 "smiles_lexer.ll"
+{ return token::ORGANIC_ATOM; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 34 "smiles_lexer.ll"
-{ std::cout << "any aromatic:: " << yytext << std::endl; return token::SIMPLE_ATOM; }
+#line 33 "smiles_lexer.ll"
+{ return token::SIMPLE_ATOM; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 35 "smiles_lexer.ll"
-{  std::cout << "atom atom:: " << yytext << std::endl; return token::NESTED_ATOM ; }
+#line 34 "smiles_lexer.ll"
+{  return token::NESTED_ATOM ; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 36 "smiles_lexer.ll"
-{ std::cout << "atom organic:: " << yytext << std::endl; return token::NESTED_ATOM; }
+#line 35 "smiles_lexer.ll"
+{ return token::NESTED_ATOM; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 38 "smiles_lexer.ll"
-{  std::cout << "ctag:: " << yytext << std::endl; return token::CHIRAL_TAG;}
+#line 37 "smiles_lexer.ll"
+{  return token::CHIRAL_TAG;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 39 "smiles_lexer.ll"
-{ BEGIN IN_ATOM_STATE;  std::cout << "begin atom:: " << yytext << std::endl; return yytext[0]; }
+#line 38 "smiles_lexer.ll"
+{ BEGIN IN_ATOM_STATE;  return yytext[0]; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 42 "smiles_lexer.ll"
-{ BEGIN INITIAL;  std::cout << "]:: " << yytext << std::endl; return yytext[0]; }
+#line 41 "smiles_lexer.ll"
+{ BEGIN INITIAL; return yytext[0]; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 43 "smiles_lexer.ll"
-{  std::cout << "atom any:: " << yytext << std::endl; return yytext[0]; }
+#line 42 "smiles_lexer.ll"
+{  return yytext[0]; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 45 "smiles_lexer.ll"
-{  std::cout << "any:: " << yytext << std::endl; return yytext[0]; }
+#line 44 "smiles_lexer.ll"
+{  return yytext[0]; }
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(IN_ATOM_STATE):
-#line 46 "smiles_lexer.ll"
-{ std::cout << "EOS" << std::endl; return token::YYEOF; }
+#line 45 "smiles_lexer.ll"
+{ return token::YYEOF; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 48 "smiles_lexer.ll"
+#line 47 "smiles_lexer.ll"
 YY_FATAL_ERROR( "flex scanner jammed" );
 	YY_BREAK
-#line 1279 "smiles_lexer.yy.cc"
+#line 1278 "smiles_lexer.yy.cc"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2226,6 +2225,6 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 48 "smiles_lexer.ll"
+#line 47 "smiles_lexer.ll"
 
 

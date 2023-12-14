@@ -142,5 +142,5 @@ ring_number:  NUMBER
 %%
 
 void smiles_parser::SmilesTokenParser::error(const location&, const std::string& msg) {
-    std::cerr << "error ++++: " << msg << std::endl;
+    std::cerr << "'"<< token_scanner.d_input << "' failed because of " << msg << std::endl;
 }

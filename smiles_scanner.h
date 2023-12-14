@@ -18,7 +18,7 @@ namespace smiles_parser {
 
             int lex(smiles_parser::SmilesTokenParser::semantic_type* const lval,
                     smiles_parser::SmilesTokenParser::location_type* location);
-        private:
+
             std::string_view d_input;
 
     };

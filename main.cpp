@@ -10,8 +10,6 @@ int main() {
     "[Pt@OH25]([OH2])([OH2])(C#N)(C#N)(C#N)C#N",
     "[Ta@OH9](F)(F)(F)(N(C)C)(N(C)C)=C1N(CCN1c2c(cc(cc2C)C)C)c3c(cc(cc3C)C)C",
     "[se@OH9](F)(F)(F)(N(C)C)(N(C)C)=C1N(CCN1c2c(cc(cc2C)C)C)c3c(cc(cc3C)C)C",
-    //"[se@OH9](F)(F)(F)(N(C)C)(N(C)C)=
-
     "[Re@OH8](Cl)(Cl)(Cl)([P](c1ccccc1)(c2ccccc2)c3ccccc3)([P](c1ccccc1)(c2ccccc2)c3ccccc3)[N]#CC",
     "]aa[",
     "[aa",
@@ -27,7 +25,7 @@ int main() {
     "C=CC(CCC)C(C(C([Jk]([e]([Hi]))))C)CCC",
    "kkkkk[Something]" }) {
         parse(smiles);
-        std::cout << "###################################\n\n" << std::endl;
+        std::cout << "###################################" << std::endl;
     }
     return 0;
 }
