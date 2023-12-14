@@ -133,7 +133,6 @@ int main() {
 "[Cu@SP2](Cl)(Cl)([NH3])[NH3]",
     }) {
         parse(smiles);
-        std::cout << "###################################" << std::endl;
     }
     return 0;
 }

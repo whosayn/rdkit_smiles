@@ -24,7 +24,7 @@
 %%
 
 
-<*>[1-9]+ { return token::NUMBER; }
+<*>[0-9]+ { return token::NUMBER; }
 
 <*>H { return token::H_TOKEN; }
 <*>B|C|N|O|P|S|F|Cl|Br|I { return token::ORGANIC_ATOM; }
@@ -34,7 +34,7 @@
 <IN_ATOM_STATE>[A-Z][a-z]*? {  return token::NESTED_ATOM ; }
 <IN_ATOM_STATE>si|as|se|te { return token::NESTED_ATOM; }
 
-@[' ']*[A-Z]+? {  return token::CHIRAL_TAG;}
+@[' ']*[A-Z][A-Z] {  return token::CHIRAL_TAG;}
 \[  { BEGIN IN_ATOM_STATE;  return yytext[0]; }
 
 
