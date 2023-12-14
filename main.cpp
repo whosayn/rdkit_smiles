@@ -26,7 +26,7 @@ int main() {
    "kkkkk[Something]",
 
 
-   "[Fe@OH1-3]1(OC(=O)C(=O)O1)1(OC(=O)C(=O)O1)1OC(=O)C(=O)O1",
+"[Fe@OH1-3]1(OC(=O)C(=O)O1)1(OC(=O)C(=O)O1)1OC(=O)C(=O)O1",
 "[Fe@OH2-3]1(OC(=O)C(=O)O1)1(OC(=O)C(=O)O1)1OC(=O)C(=O)O1",
 "[Co@OH1+](Cl)(Cl)1([NH2]CC[NH2]1)1[NH2]CC[NH2]1",
 "[Co@OH2+](Cl)(Cl)1([NH2]CC[NH2]1)1[NH2]CC[NH2]1",

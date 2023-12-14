@@ -489,18 +489,20 @@ namespace smiles_parser {
         S_seq = 31,                              // seq
         S_bond = 32,                             // bond
         S_atom = 33,                             // atom
-        S_charge_element = 34,                   // charge_element
-        S_plus_signs = 35,                       // plus_signs
-        S_minus_signs = 36,                      // minus_signs
-        S_chargeable_element = 37,               // chargeable_element
-        S_oxidizing_agent = 38,                  // oxidizing_agent
-        S_oxidizable_agent = 39,                 // oxidizable_agent
-        S_chiral_element = 40,                   // chiral_element
-        S_element = 41,                          // element
-        S_isotope = 42,                          // isotope
-        S_non_isotope = 43,                      // non_isotope
-        S_biovia_atom = 44,                      // biovia_atom
-        S_ring_number = 45                       // ring_number
+        S_needs_sq_bracs = 34,                   // needs_sq_bracs
+        S_atom_with_charge = 35,                 // atom_with_charge
+        S_atom_charge = 36,                      // atom_charge
+        S_plus_signs = 37,                       // plus_signs
+        S_minus_signs = 38,                      // minus_signs
+        S_atom_that_can_have_charge = 39,        // atom_that_can_have_charge
+        S_atom_with_hydrogens = 40,              // atom_with_hydrogens
+        S_atom_that_can_have_hydrogens = 41,     // atom_that_can_have_hydrogens
+        S_chiral_element = 42,                   // chiral_element
+        S_element = 43,                          // element
+        S_isotope = 44,                          // isotope
+        S_non_isotope = 45,                      // non_isotope
+        S_biovia_atom = 46,                      // biovia_atom
+        S_ring_number = 47                       // ring_number
       };
     };
 
@@ -1173,9 +1175,9 @@ switch (yykind)
     /// Constants.
     enum
     {
-      yylast_ = 118,     ///< Last index in yytable_.
-      yynnts_ = 18,  ///< Number of nonterminal symbols.
-      yyfinal_ = 24 ///< Termination state number.
+      yylast_ = 119,     ///< Last index in yytable_.
+      yynnts_ = 20,  ///< Number of nonterminal symbols.
+      yyfinal_ = 25 ///< Termination state number.
     };
 
 
@@ -1187,7 +1189,7 @@ switch (yykind)
 
 #line 5 "smiles_grammar.yy"
 } // smiles_parser
-#line 1191 "smiles_grammar.hh"
+#line 1193 "smiles_grammar.hh"
 
 
 

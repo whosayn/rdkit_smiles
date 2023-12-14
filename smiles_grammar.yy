@@ -73,18 +73,20 @@ bond: '-'
 /* --------------------------------------------------------------- */
 atom: SIMPLE_ATOM
     | ORGANIC_ATOM
-    | '[' charge_element ':' NUMBER ']'
-    | '[' charge_element ']'
+    | '[' needs_sq_bracs ':' NUMBER ']'
+    | '[' needs_sq_bracs ']'
     ;
 
+needs_sq_bracs: atom_that_can_have_charge
+              | atom_with_charge;
 /* --------------------------------------------------------------- */
-charge_element:	chargeable_element
-              | chargeable_element plus_signs
-              | chargeable_element '+' NUMBER
-              | chargeable_element minus_signs
-              | chargeable_element '-' NUMBER
-              ;
+atom_with_charge: atom_that_can_have_charge atom_charge;
 
+atom_charge: plus_signs
+           | '+' NUMBER
+           | minus_signs
+           | '-' NUMBER
+           ;
 plus_signs: '+'
           | plus_signs '+'
           ;
@@ -92,15 +94,15 @@ minus_signs: '-'
            | minus_signs '-'
            ;
 
-chargeable_element: oxidizable_agent
-                  | oxidizing_agent;
+atom_that_can_have_charge: atom_that_can_have_hydrogens
+                  | atom_with_hydrogens;
 
 /* --------------------------------------------------------------- */
-oxidizing_agent: oxidizable_agent H_TOKEN
-               | oxidizable_agent H_TOKEN NUMBER;
+atom_with_hydrogens: atom_that_can_have_hydrogens H_TOKEN
+               | atom_that_can_have_hydrogens H_TOKEN NUMBER;
                ;
 
-oxidizable_agent: H_TOKEN
+atom_that_can_have_hydrogens: H_TOKEN
            | NUMBER H_TOKEN
            | element
            | chiral_element;
