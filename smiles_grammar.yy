@@ -123,15 +123,20 @@ chiral_element:	 element
               ;
 
 /* --------------------------------------------------------------- */
-element:	SIMPLE_ATOM
-	   |	NUMBER SIMPLE_ATOM
+element: non_isotope
+       | isotope;
+
+isotope: NUMBER non_isotope;
+
+non_isotope: SIMPLE_ATOM
        |	ORGANIC_ATOM
-	   |	NUMBER ORGANIC_ATOM
        |	NESTED_ATOM
-       |	NUMBER NESTED_ATOM
        |   '#' NUMBER
-       |	NUMBER '#' NUMBER
+       |    biovia_atom
        ;
+
+
+biovia_atom: '\'' NESTED_ATOM '\''
 
 /* --------------------------------------------------------------- */
 ring_number:  NUMBER

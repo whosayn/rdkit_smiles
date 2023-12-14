@@ -453,7 +453,7 @@ namespace smiles_parser {
     {
       enum symbol_kind_type
       {
-        YYNTOKENS = 27, ///< Number of tokens.
+        YYNTOKENS = 28, ///< Number of tokens.
         S_YYEMPTY = -2,
         S_YYEOF = 0,                             // "end of file"
         S_YYerror = 1,                           // error
@@ -481,20 +481,24 @@ namespace smiles_parser {
         S_23_ = 23,                              // ']'
         S_24_ = 24,                              // '+'
         S_25_ = 25,                              // '@'
-        S_26_ = 26,                              // '%'
-        S_YYACCEPT = 27,                         // $accept
-        S_mols = 28,                             // mols
-        S_mol = 29,                              // mol
-        S_seq = 30,                              // seq
-        S_bond = 31,                             // bond
-        S_atom = 32,                             // atom
-        S_charge_element = 33,                   // charge_element
-        S_plus_signs = 34,                       // plus_signs
-        S_minus_signs = 35,                      // minus_signs
-        S_h_element = 36,                        // h_element
-        S_chiral_element = 37,                   // chiral_element
-        S_element = 38,                          // element
-        S_ring_number = 39                       // ring_number
+        S_26_ = 26,                              // '\''
+        S_27_ = 27,                              // '%'
+        S_YYACCEPT = 28,                         // $accept
+        S_mols = 29,                             // mols
+        S_mol = 30,                              // mol
+        S_seq = 31,                              // seq
+        S_bond = 32,                             // bond
+        S_atom = 33,                             // atom
+        S_charge_element = 34,                   // charge_element
+        S_plus_signs = 35,                       // plus_signs
+        S_minus_signs = 36,                      // minus_signs
+        S_h_element = 37,                        // h_element
+        S_chiral_element = 38,                   // chiral_element
+        S_element = 39,                          // element
+        S_isotope = 40,                          // isotope
+        S_non_isotope = 41,                      // non_isotope
+        S_biovia_atom = 42,                      // biovia_atom
+        S_ring_number = 43                       // ring_number
       };
     };
 
@@ -1167,9 +1171,9 @@ switch (yykind)
     /// Constants.
     enum
     {
-      yylast_ = 126,     ///< Last index in yytable_.
-      yynnts_ = 13,  ///< Number of nonterminal symbols.
-      yyfinal_ = 18 ///< Termination state number.
+      yylast_ = 138,     ///< Last index in yytable_.
+      yynnts_ = 16,  ///< Number of nonterminal symbols.
+      yyfinal_ = 22 ///< Termination state number.
     };
 
 
@@ -1181,7 +1185,7 @@ switch (yykind)
 
 #line 5 "smiles_grammar.yy"
 } // smiles_parser
-#line 1185 "smiles_grammar.hh"
+#line 1189 "smiles_grammar.hh"
 
 
 
