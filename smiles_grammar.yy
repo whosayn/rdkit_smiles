@@ -34,6 +34,8 @@ class SmilesTokenScanner;
 
 %token NUMBER CHIRAL_TAG SIMPLE_ATOM NESTED_ATOM H_TOKEN ORGANIC_ATOM;
 
+%left SIMPLE_ATOM NESTED_ATOM ORGANIC_ATOM
+%precedence UMINUS
 %start mols
 
 %%
@@ -50,14 +52,17 @@ mols: mol
 
 /* --------------------------------------------------------------- */
 // FIX: mol MINUS DIGIT
-mol: atom
-   | mol atom
-   | mol bond atom
-   | mol ring_number
-   | mol bond ring_number
-   | mol '(' atom
-   | mol '(' bond atom
-   | mol ')'
+mol: seq
+   | mol seq
+   ;
+
+seq: atom
+   | seq atom
+   | seq bond atom
+   | seq ring_number
+   | seq bond ring_number
+   | seq '(' seq ')'
+   | seq '(' bond seq ')'
    ;
 
 /* --------------------------------------------------------------- */
@@ -84,12 +89,20 @@ atom:	SIMPLE_ATOM
 /* --------------------------------------------------------------- */
 charge_element:	h_element
               | h_element '+'
-              | h_element '+' '+'
+              | h_element plus_signs
               | h_element '+' NUMBER
               | h_element '-'
-              | h_element '-' '-'
+              | h_element minus_signs
               | h_element '-' NUMBER
               ;
+
+plus_signs: '+' '+'
+          | plus_signs '+'
+          ;
+minus_signs: '-' '-'
+           | minus_signs '-'
+           ;
+
 
 /* --------------------------------------------------------------- */
 h_element: H_TOKEN
