@@ -1058,6 +1058,7 @@ namespace smiles_parser {
 #line 136 "smiles_grammar.yy"
 
 
-void smiles_parser::SmilesTokenParser::error(const location&, const std::string& msg) {
-    std::cerr << "'"<< token_scanner.d_input << "' failed because of " << msg << std::endl;
+void smiles_parser::SmilesTokenParser::error(const location& loc, const std::string& msg) {
+    std::cerr << "'"<< token_scanner.d_input << "' failed because of " << msg <<
+" at position: " << loc.begin.column << std::endl;
 }
