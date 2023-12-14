@@ -45,9 +45,7 @@ mols: mol
 
 /* --------------------------------------------------------------- */
 // FIX: mol MINUS DIGIT
-mol: seq
-   | mol seq
-   ;
+mol: seq;
 
 seq: atom
    | seq atom
