@@ -436,8 +436,7 @@ namespace smiles_parser {
     SIMPLE_ATOM = 260,             // SIMPLE_ATOM
     NESTED_ATOM = 261,             // NESTED_ATOM
     H_TOKEN = 262,                 // H_TOKEN
-    ORGANIC_ATOM = 263,            // ORGANIC_ATOM
-    UMINUS = 264                   // UMINUS
+    ORGANIC_ATOM = 263             // ORGANIC_ATOM
       };
       /// Backward compatibility alias (Bison 3.6).
       typedef token_kind_type yytokentype;
@@ -454,7 +453,7 @@ namespace smiles_parser {
     {
       enum symbol_kind_type
       {
-        YYNTOKENS = 28, ///< Number of tokens.
+        YYNTOKENS = 27, ///< Number of tokens.
         S_YYEMPTY = -2,
         S_YYEOF = 0,                             // "end of file"
         S_YYerror = 1,                           // error
@@ -465,38 +464,37 @@ namespace smiles_parser {
         S_NESTED_ATOM = 6,                       // NESTED_ATOM
         S_H_TOKEN = 7,                           // H_TOKEN
         S_ORGANIC_ATOM = 8,                      // ORGANIC_ATOM
-        S_UMINUS = 9,                            // UMINUS
-        S_10_ = 10,                              // '.'
-        S_11_ = 11,                              // '('
-        S_12_ = 12,                              // ')'
-        S_13_ = 13,                              // '-'
-        S_14_ = 14,                              // '='
-        S_15_ = 15,                              // '#'
-        S_16_ = 16,                              // ':'
-        S_17_ = 17,                              // '$'
-        S_18_ = 18,                              // '~'
-        S_19_ = 19,                              // '>'
-        S_20_ = 20,                              // '<'
-        S_21_ = 21,                              // '\\'
-        S_22_ = 22,                              // '/'
-        S_23_ = 23,                              // '['
-        S_24_ = 24,                              // ']'
-        S_25_ = 25,                              // '+'
-        S_26_ = 26,                              // '@'
-        S_27_ = 27,                              // '%'
-        S_YYACCEPT = 28,                         // $accept
-        S_mols = 29,                             // mols
-        S_mol = 30,                              // mol
-        S_seq = 31,                              // seq
-        S_bond = 32,                             // bond
-        S_atom = 33,                             // atom
-        S_charge_element = 34,                   // charge_element
-        S_plus_signs = 35,                       // plus_signs
-        S_minus_signs = 36,                      // minus_signs
-        S_h_element = 37,                        // h_element
-        S_chiral_element = 38,                   // chiral_element
-        S_element = 39,                          // element
-        S_ring_number = 40                       // ring_number
+        S_9_ = 9,                                // '.'
+        S_10_ = 10,                              // '('
+        S_11_ = 11,                              // ')'
+        S_12_ = 12,                              // '-'
+        S_13_ = 13,                              // '='
+        S_14_ = 14,                              // '#'
+        S_15_ = 15,                              // ':'
+        S_16_ = 16,                              // '$'
+        S_17_ = 17,                              // '~'
+        S_18_ = 18,                              // '>'
+        S_19_ = 19,                              // '<'
+        S_20_ = 20,                              // '\\'
+        S_21_ = 21,                              // '/'
+        S_22_ = 22,                              // '['
+        S_23_ = 23,                              // ']'
+        S_24_ = 24,                              // '+'
+        S_25_ = 25,                              // '@'
+        S_26_ = 26,                              // '%'
+        S_YYACCEPT = 27,                         // $accept
+        S_mols = 28,                             // mols
+        S_mol = 29,                              // mol
+        S_seq = 30,                              // seq
+        S_bond = 31,                             // bond
+        S_atom = 32,                             // atom
+        S_charge_element = 33,                   // charge_element
+        S_plus_signs = 34,                       // plus_signs
+        S_minus_signs = 35,                      // minus_signs
+        S_h_element = 36,                        // h_element
+        S_chiral_element = 37,                   // chiral_element
+        S_element = 38,                          // element
+        S_ring_number = 39                       // ring_number
       };
     };
 
@@ -865,21 +863,6 @@ switch (yykind)
         return symbol_type (token::ORGANIC_ATOM, l);
       }
 #endif
-#if 201103L <= YY_CPLUSPLUS
-      static
-      symbol_type
-      make_UMINUS (location_type l)
-      {
-        return symbol_type (token::UMINUS, std::move (l));
-      }
-#else
-      static
-      symbol_type
-      make_UMINUS (const location_type& l)
-      {
-        return symbol_type (token::UMINUS, l);
-      }
-#endif
 
 
   private:
@@ -1184,7 +1167,7 @@ switch (yykind)
     /// Constants.
     enum
     {
-      yylast_ = 124,     ///< Last index in yytable_.
+      yylast_ = 126,     ///< Last index in yytable_.
       yynnts_ = 13,  ///< Number of nonterminal symbols.
       yyfinal_ = 18 ///< Termination state number.
     };
@@ -1198,7 +1181,7 @@ switch (yykind)
 
 #line 5 "smiles_grammar.yy"
 } // smiles_parser
-#line 1202 "smiles_grammar.hh"
+#line 1185 "smiles_grammar.hh"
 
 
 

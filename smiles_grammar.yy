@@ -34,8 +34,6 @@ class SmilesTokenScanner;
 
 %token NUMBER CHIRAL_TAG SIMPLE_ATOM NESTED_ATOM H_TOKEN ORGANIC_ATOM;
 
-%left SIMPLE_ATOM NESTED_ATOM ORGANIC_ATOM
-%precedence UMINUS
 %start mols
 
 %%
