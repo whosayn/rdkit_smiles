@@ -38,11 +38,6 @@ class SmilesTokenScanner;
 
 %%
 /* --------------------------------------------------------------- */
-/*
-meta_start:
-| meta_start EOS_TOKEN
-;
-*/
 
 mols: mol
     | mols '.' mol
@@ -78,43 +73,42 @@ bond: '-'
     ;
 
 /* --------------------------------------------------------------- */
-atom:	SIMPLE_ATOM
+atom: SIMPLE_ATOM
     | ORGANIC_ATOM
     | '[' charge_element ':' NUMBER ']'
     | '[' charge_element ']'
     ;
 
 /* --------------------------------------------------------------- */
-charge_element:	h_element
-              | h_element '+'
-              | h_element plus_signs
-              | h_element '+' NUMBER
-              | h_element '-'
-              | h_element minus_signs
-              | h_element '-' NUMBER
+charge_element:	chargeable_element
+              | chargeable_element plus_signs
+              | chargeable_element '+' NUMBER
+              | chargeable_element minus_signs
+              | chargeable_element '-' NUMBER
               ;
 
-plus_signs: '+' '+'
+plus_signs: '+'
           | plus_signs '+'
           ;
-minus_signs: '-' '-'
+minus_signs: '-'
            | minus_signs '-'
            ;
 
+chargeable_element: oxidizable_agent
+                  | oxidizing_agent;
 
 /* --------------------------------------------------------------- */
-h_element: oxid_agent
-         | oxid_agent H_TOKEN
-         | oxid_agent H_TOKEN NUMBER;
-         ;
+oxidizing_agent: oxidizable_agent H_TOKEN
+               | oxidizable_agent H_TOKEN NUMBER;
+               ;
 
-oxid_agent: H_TOKEN
+oxidizable_agent: H_TOKEN
            | NUMBER H_TOKEN
            | element
            | chiral_element;
 
 /* --------------------------------------------------------------- */
-chiral_element:	 element '@'
+chiral_element:	element '@'
               | element '@' '@'
               | element CHIRAL_TAG
               | element CHIRAL_TAG NUMBER
