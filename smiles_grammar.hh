@@ -493,12 +493,13 @@ namespace smiles_parser {
         S_plus_signs = 35,                       // plus_signs
         S_minus_signs = 36,                      // minus_signs
         S_h_element = 37,                        // h_element
-        S_chiral_element = 38,                   // chiral_element
-        S_element = 39,                          // element
-        S_isotope = 40,                          // isotope
-        S_non_isotope = 41,                      // non_isotope
-        S_biovia_atom = 42,                      // biovia_atom
-        S_ring_number = 43                       // ring_number
+        S_oxid_agent = 38,                       // oxid_agent
+        S_chiral_element = 39,                   // chiral_element
+        S_element = 40,                          // element
+        S_isotope = 41,                          // isotope
+        S_non_isotope = 42,                      // non_isotope
+        S_biovia_atom = 43,                      // biovia_atom
+        S_ring_number = 44                       // ring_number
       };
     };
 
@@ -1171,9 +1172,9 @@ switch (yykind)
     /// Constants.
     enum
     {
-      yylast_ = 138,     ///< Last index in yytable_.
-      yynnts_ = 16,  ///< Number of nonterminal symbols.
-      yyfinal_ = 22 ///< Termination state number.
+      yylast_ = 125,     ///< Last index in yytable_.
+      yynnts_ = 17,  ///< Number of nonterminal symbols.
+      yyfinal_ = 23 ///< Termination state number.
     };
 
 
@@ -1185,7 +1186,7 @@ switch (yykind)
 
 #line 5 "smiles_grammar.yy"
 } // smiles_parser
-#line 1189 "smiles_grammar.hh"
+#line 1190 "smiles_grammar.hh"
 
 
 

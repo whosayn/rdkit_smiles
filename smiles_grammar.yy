@@ -103,20 +103,18 @@ minus_signs: '-' '-'
 
 
 /* --------------------------------------------------------------- */
-h_element: H_TOKEN
-         | NUMBER H_TOKEN
-         | H_TOKEN H_TOKEN
-         | NUMBER H_TOKEN H_TOKEN
-         | H_TOKEN H_TOKEN NUMBER
-         | NUMBER H_TOKEN H_TOKEN NUMBER
-         | chiral_element
-         | chiral_element H_TOKEN
-         | chiral_element H_TOKEN NUMBER
+h_element: oxid_agent
+         | oxid_agent H_TOKEN
+         | oxid_agent H_TOKEN NUMBER;
          ;
 
+oxid_agent: H_TOKEN
+           | NUMBER H_TOKEN
+           | element
+           | chiral_element;
+
 /* --------------------------------------------------------------- */
-chiral_element:	 element
-              | element '@'
+chiral_element:	 element '@'
               | element '@' '@'
               | element CHIRAL_TAG
               | element CHIRAL_TAG NUMBER
@@ -134,7 +132,6 @@ non_isotope: SIMPLE_ATOM
        |   '#' NUMBER
        |    biovia_atom
        ;
-
 
 biovia_atom: '\'' NESTED_ATOM '\''
 
