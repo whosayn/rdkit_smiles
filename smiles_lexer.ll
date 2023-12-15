@@ -5,7 +5,9 @@
 #undef YY_DECL
 #define YY_DECL int smiles_parser::SmilesTokenScanner::lex(smiles_parser::SmilesTokenParser::semantic_type* const lval, smiles_parser::SmilesTokenParser::location_type* location)
 
-#define YY_USER_ACTION location->step(); location->columns(yyleng);
+#define YY_USER_ACTION \
+    lval->build<std::string_view>(d_input.substr(location->begin.column, yyleng)); \
+    location->step(); location->columns(yyleng);
 
     using token = smiles_parser::SmilesTokenParser::token_kind_type;
 %}
@@ -33,6 +35,7 @@
 <*>[a-z]  { return token::SIMPLE_ATOM; }
 <IN_ATOM_STATE>[A-Z][a-z]*? {  return token::NESTED_ATOM ; }
 <IN_ATOM_STATE>si|as|se|te { return token::NESTED_ATOM; }
+<IN_ATOM_STATE>\'[A-Z][a-z]*?\' {  return token::BIOVIA_ATOM ; }
 
 @[' ']*[A-Z][A-Z] {  return token::CHIRAL_TAG;}
 \[  { BEGIN IN_ATOM_STATE;  return yytext[0]; }

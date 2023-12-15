@@ -131,8 +131,12 @@ int main() {
 "[Mo@OH1](C#[O])(C#[O])(C#[O])(C#[O])(C#[O])C#[O]",
 "[Hf@OH1](Cl)(Cl)(Cl)(Cl)([O]1CCCC1)[O]1CCCC1",
 "[Cu@SP2](Cl)(Cl)([NH3])[NH3]",
+"Cl.Cl",
+"[Na+].[O-]c1ccccc1",
+"c1cc([O-].[Na+])ccc1",
+"[HH]"
     }) {
-        parse(smiles);
+        smiles_parser::parse(smiles);
     }
     return 0;
 }

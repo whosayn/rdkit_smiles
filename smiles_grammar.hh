@@ -45,13 +45,14 @@
 #ifndef YY_YY_SMILES_GRAMMAR_HH_INCLUDED
 # define YY_YY_SMILES_GRAMMAR_HH_INCLUDED
 // "%code requires" blocks.
-#line 16 "smiles_grammar.yy"
+#line 15 "smiles_grammar.yy"
 
 namespace smiles_parser {
 class SmilesTokenScanner;
+class SmilesASTBuilder;
 }
 
-#line 55 "smiles_grammar.hh"
+#line 56 "smiles_grammar.hh"
 
 
 # include <cstdlib> // std::abort
@@ -187,7 +188,7 @@ class SmilesTokenScanner;
 
 #line 5 "smiles_grammar.yy"
 namespace smiles_parser {
-#line 191 "smiles_grammar.hh"
+#line 192 "smiles_grammar.hh"
 
 
 
@@ -382,7 +383,23 @@ namespace smiles_parser {
 
     /// An auxiliary type to compute the largest semantic type.
     union union_type
-    {    };
+    {
+      // atom_charge
+      // plus_signs
+      // minus_signs
+      // explicit_h
+      char dummy1[sizeof (int)];
+
+      // SIMPLE_ATOM
+      // NESTED_ATOM
+      // H_TOKEN
+      // ORGANIC_ATOM
+      // BIOVIA_ATOM
+      // CHIRAL_TAG
+      // NUMBER
+      // ring_number
+      char dummy2[sizeof (std::string_view)];
+    };
 
     /// The size of the largest semantic type.
     enum { size = sizeof (union_type) };
@@ -431,12 +448,13 @@ namespace smiles_parser {
     YYEOF = 0,                     // "end of file"
     YYerror = 256,                 // error
     YYUNDEF = 257,                 // "invalid token"
-    NUMBER = 258,                  // NUMBER
-    CHIRAL_TAG = 259,              // CHIRAL_TAG
-    SIMPLE_ATOM = 260,             // SIMPLE_ATOM
-    NESTED_ATOM = 261,             // NESTED_ATOM
-    H_TOKEN = 262,                 // H_TOKEN
-    ORGANIC_ATOM = 263             // ORGANIC_ATOM
+    SIMPLE_ATOM = 258,             // SIMPLE_ATOM
+    NESTED_ATOM = 259,             // NESTED_ATOM
+    H_TOKEN = 260,                 // H_TOKEN
+    ORGANIC_ATOM = 261,            // ORGANIC_ATOM
+    BIOVIA_ATOM = 262,             // BIOVIA_ATOM
+    CHIRAL_TAG = 263,              // CHIRAL_TAG
+    NUMBER = 264                   // NUMBER
       };
       /// Backward compatibility alias (Bison 3.6).
       typedef token_kind_type yytokentype;
@@ -458,51 +476,52 @@ namespace smiles_parser {
         S_YYEOF = 0,                             // "end of file"
         S_YYerror = 1,                           // error
         S_YYUNDEF = 2,                           // "invalid token"
-        S_NUMBER = 3,                            // NUMBER
-        S_CHIRAL_TAG = 4,                        // CHIRAL_TAG
-        S_SIMPLE_ATOM = 5,                       // SIMPLE_ATOM
-        S_NESTED_ATOM = 6,                       // NESTED_ATOM
-        S_H_TOKEN = 7,                           // H_TOKEN
-        S_ORGANIC_ATOM = 8,                      // ORGANIC_ATOM
-        S_9_ = 9,                                // '.'
-        S_10_ = 10,                              // '('
-        S_11_ = 11,                              // ')'
-        S_12_ = 12,                              // '-'
-        S_13_ = 13,                              // '='
-        S_14_ = 14,                              // '#'
-        S_15_ = 15,                              // ':'
-        S_16_ = 16,                              // '$'
-        S_17_ = 17,                              // '~'
-        S_18_ = 18,                              // '>'
-        S_19_ = 19,                              // '<'
-        S_20_ = 20,                              // '\\'
-        S_21_ = 21,                              // '/'
-        S_22_ = 22,                              // '['
-        S_23_ = 23,                              // ']'
-        S_24_ = 24,                              // '+'
-        S_25_ = 25,                              // '@'
-        S_26_ = 26,                              // '\''
+        S_SIMPLE_ATOM = 3,                       // SIMPLE_ATOM
+        S_NESTED_ATOM = 4,                       // NESTED_ATOM
+        S_H_TOKEN = 5,                           // H_TOKEN
+        S_ORGANIC_ATOM = 6,                      // ORGANIC_ATOM
+        S_BIOVIA_ATOM = 7,                       // BIOVIA_ATOM
+        S_CHIRAL_TAG = 8,                        // CHIRAL_TAG
+        S_NUMBER = 9,                            // NUMBER
+        S_10_ = 10,                              // '.'
+        S_11_ = 11,                              // '('
+        S_12_ = 12,                              // ')'
+        S_13_ = 13,                              // '-'
+        S_14_ = 14,                              // '='
+        S_15_ = 15,                              // '#'
+        S_16_ = 16,                              // ':'
+        S_17_ = 17,                              // '$'
+        S_18_ = 18,                              // '~'
+        S_19_ = 19,                              // '>'
+        S_20_ = 20,                              // '<'
+        S_21_ = 21,                              // '\\'
+        S_22_ = 22,                              // '/'
+        S_23_ = 23,                              // '['
+        S_24_ = 24,                              // ']'
+        S_25_ = 25,                              // '+'
+        S_26_ = 26,                              // '@'
         S_27_ = 27,                              // '%'
         S_YYACCEPT = 28,                         // $accept
-        S_mols = 29,                             // mols
-        S_mol = 30,                              // mol
-        S_seq = 31,                              // seq
-        S_bond = 32,                             // bond
-        S_atom = 33,                             // atom
-        S_needs_sq_bracs = 34,                   // needs_sq_bracs
-        S_atom_with_charge = 35,                 // atom_with_charge
-        S_atom_charge = 36,                      // atom_charge
-        S_plus_signs = 37,                       // plus_signs
-        S_minus_signs = 38,                      // minus_signs
-        S_atom_that_can_have_charge = 39,        // atom_that_can_have_charge
-        S_atom_with_hydrogens = 40,              // atom_with_hydrogens
+        S_mol = 29,                              // mol
+        S_bond = 30,                             // bond
+        S_atom = 31,                             // atom
+        S_atom_map_number = 32,                  // atom_map_number
+        S_needs_sq_bracs = 33,                   // needs_sq_bracs
+        S_atom_with_charge = 34,                 // atom_with_charge
+        S_atom_charge = 35,                      // atom_charge
+        S_plus_signs = 36,                       // plus_signs
+        S_minus_signs = 37,                      // minus_signs
+        S_atom_that_can_have_charge = 38,        // atom_that_can_have_charge
+        S_atom_with_hydrogens = 39,              // atom_with_hydrogens
+        S_explicit_h = 40,                       // explicit_h
         S_atom_that_can_have_hydrogens = 41,     // atom_that_can_have_hydrogens
-        S_chiral_element = 42,                   // chiral_element
-        S_element = 43,                          // element
-        S_isotope = 44,                          // isotope
-        S_non_isotope = 45,                      // non_isotope
-        S_biovia_atom = 46,                      // biovia_atom
-        S_ring_number = 47                       // ring_number
+        S_hydrogen_atom = 42,                    // hydrogen_atom
+        S_chiral_element = 43,                   // chiral_element
+        S_element = 44,                          // element
+        S_isotope = 45,                          // isotope
+        S_non_isotope = 46,                      // non_isotope
+        S_simple_atom = 47,                      // simple_atom
+        S_ring_number = 48                       // ring_number
       };
     };
 
@@ -539,6 +558,24 @@ namespace smiles_parser {
       {
         switch (this->kind ())
     {
+      case symbol_kind::S_atom_charge: // atom_charge
+      case symbol_kind::S_plus_signs: // plus_signs
+      case symbol_kind::S_minus_signs: // minus_signs
+      case symbol_kind::S_explicit_h: // explicit_h
+        value.move< int > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_SIMPLE_ATOM: // SIMPLE_ATOM
+      case symbol_kind::S_NESTED_ATOM: // NESTED_ATOM
+      case symbol_kind::S_H_TOKEN: // H_TOKEN
+      case symbol_kind::S_ORGANIC_ATOM: // ORGANIC_ATOM
+      case symbol_kind::S_BIOVIA_ATOM: // BIOVIA_ATOM
+      case symbol_kind::S_CHIRAL_TAG: // CHIRAL_TAG
+      case symbol_kind::S_NUMBER: // NUMBER
+      case symbol_kind::S_ring_number: // ring_number
+        value.move< std::string_view > (std::move (that.value));
+        break;
+
       default:
         break;
     }
@@ -558,6 +595,34 @@ namespace smiles_parser {
 #else
       basic_symbol (typename Base::kind_type t, const location_type& l)
         : Base (t)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, int&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const int& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, std::string_view&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const std::string_view& v, const location_type& l)
+        : Base (t)
+        , value (v)
         , location (l)
       {}
 #endif
@@ -586,6 +651,24 @@ namespace smiles_parser {
         // Value type destructor.
 switch (yykind)
     {
+      case symbol_kind::S_atom_charge: // atom_charge
+      case symbol_kind::S_plus_signs: // plus_signs
+      case symbol_kind::S_minus_signs: // minus_signs
+      case symbol_kind::S_explicit_h: // explicit_h
+        value.template destroy< int > ();
+        break;
+
+      case symbol_kind::S_SIMPLE_ATOM: // SIMPLE_ATOM
+      case symbol_kind::S_NESTED_ATOM: // NESTED_ATOM
+      case symbol_kind::S_H_TOKEN: // H_TOKEN
+      case symbol_kind::S_ORGANIC_ATOM: // ORGANIC_ATOM
+      case symbol_kind::S_BIOVIA_ATOM: // BIOVIA_ATOM
+      case symbol_kind::S_CHIRAL_TAG: // CHIRAL_TAG
+      case symbol_kind::S_NUMBER: // NUMBER
+      case symbol_kind::S_ring_number: // ring_number
+        value.template destroy< std::string_view > ();
+        break;
+
       default:
         break;
     }
@@ -685,10 +768,18 @@ switch (yykind)
         : super_type (token_kind_type (tok), l)
 #endif
       {}
+#if 201103L <= YY_CPLUSPLUS
+      symbol_type (int tok, std::string_view v, location_type l)
+        : super_type (token_kind_type (tok), std::move (v), std::move (l))
+#else
+      symbol_type (int tok, const std::string_view& v, const location_type& l)
+        : super_type (token_kind_type (tok), v, l)
+#endif
+      {}
     };
 
     /// Build a parser object.
-    SmilesTokenParser (SmilesTokenScanner& token_scanner_yyarg);
+    SmilesTokenParser (SmilesTokenScanner& token_scanner_yyarg, SmilesASTBuilder& ast_builder_yyarg);
     virtual ~SmilesTokenParser ();
 
 #if 201103L <= YY_CPLUSPLUS
@@ -784,91 +875,106 @@ switch (yykind)
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_NUMBER (location_type l)
+      make_SIMPLE_ATOM (std::string_view v, location_type l)
       {
-        return symbol_type (token::NUMBER, std::move (l));
+        return symbol_type (token::SIMPLE_ATOM, std::move (v), std::move (l));
       }
 #else
       static
       symbol_type
-      make_NUMBER (const location_type& l)
+      make_SIMPLE_ATOM (const std::string_view& v, const location_type& l)
       {
-        return symbol_type (token::NUMBER, l);
+        return symbol_type (token::SIMPLE_ATOM, v, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_CHIRAL_TAG (location_type l)
+      make_NESTED_ATOM (std::string_view v, location_type l)
       {
-        return symbol_type (token::CHIRAL_TAG, std::move (l));
+        return symbol_type (token::NESTED_ATOM, std::move (v), std::move (l));
       }
 #else
       static
       symbol_type
-      make_CHIRAL_TAG (const location_type& l)
+      make_NESTED_ATOM (const std::string_view& v, const location_type& l)
       {
-        return symbol_type (token::CHIRAL_TAG, l);
+        return symbol_type (token::NESTED_ATOM, v, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_SIMPLE_ATOM (location_type l)
+      make_H_TOKEN (std::string_view v, location_type l)
       {
-        return symbol_type (token::SIMPLE_ATOM, std::move (l));
+        return symbol_type (token::H_TOKEN, std::move (v), std::move (l));
       }
 #else
       static
       symbol_type
-      make_SIMPLE_ATOM (const location_type& l)
+      make_H_TOKEN (const std::string_view& v, const location_type& l)
       {
-        return symbol_type (token::SIMPLE_ATOM, l);
+        return symbol_type (token::H_TOKEN, v, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_NESTED_ATOM (location_type l)
+      make_ORGANIC_ATOM (std::string_view v, location_type l)
       {
-        return symbol_type (token::NESTED_ATOM, std::move (l));
+        return symbol_type (token::ORGANIC_ATOM, std::move (v), std::move (l));
       }
 #else
       static
       symbol_type
-      make_NESTED_ATOM (const location_type& l)
+      make_ORGANIC_ATOM (const std::string_view& v, const location_type& l)
       {
-        return symbol_type (token::NESTED_ATOM, l);
+        return symbol_type (token::ORGANIC_ATOM, v, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_H_TOKEN (location_type l)
+      make_BIOVIA_ATOM (std::string_view v, location_type l)
       {
-        return symbol_type (token::H_TOKEN, std::move (l));
+        return symbol_type (token::BIOVIA_ATOM, std::move (v), std::move (l));
       }
 #else
       static
       symbol_type
-      make_H_TOKEN (const location_type& l)
+      make_BIOVIA_ATOM (const std::string_view& v, const location_type& l)
       {
-        return symbol_type (token::H_TOKEN, l);
+        return symbol_type (token::BIOVIA_ATOM, v, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_ORGANIC_ATOM (location_type l)
+      make_CHIRAL_TAG (std::string_view v, location_type l)
       {
-        return symbol_type (token::ORGANIC_ATOM, std::move (l));
+        return symbol_type (token::CHIRAL_TAG, std::move (v), std::move (l));
       }
 #else
       static
       symbol_type
-      make_ORGANIC_ATOM (const location_type& l)
+      make_CHIRAL_TAG (const std::string_view& v, const location_type& l)
       {
-        return symbol_type (token::ORGANIC_ATOM, l);
+        return symbol_type (token::CHIRAL_TAG, v, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_NUMBER (std::string_view v, location_type l)
+      {
+        return symbol_type (token::NUMBER, std::move (v), std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_NUMBER (const std::string_view& v, const location_type& l)
+      {
+        return symbol_type (token::NUMBER, v, l);
       }
 #endif
 
@@ -1175,21 +1281,22 @@ switch (yykind)
     /// Constants.
     enum
     {
-      yylast_ = 119,     ///< Last index in yytable_.
-      yynnts_ = 20,  ///< Number of nonterminal symbols.
-      yyfinal_ = 25 ///< Termination state number.
+      yylast_ = 135,     ///< Last index in yytable_.
+      yynnts_ = 21,  ///< Number of nonterminal symbols.
+      yyfinal_ = 23 ///< Termination state number.
     };
 
 
     // User arguments.
     SmilesTokenScanner& token_scanner;
+    SmilesASTBuilder& ast_builder;
 
   };
 
 
 #line 5 "smiles_grammar.yy"
 } // smiles_parser
-#line 1193 "smiles_grammar.hh"
+#line 1300 "smiles_grammar.hh"
 
 
 

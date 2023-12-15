@@ -5,7 +5,6 @@
 %define api.namespace {smiles_parser}
 %define api.parser.class {SmilesTokenParser}
 %define api.value.type variant
-//%define api.value.automove
 %defines "smiles_grammar.hh"
 %output "smiles_grammar.cc"
 
@@ -16,44 +15,50 @@
 %code requires {
 namespace smiles_parser {
 class SmilesTokenScanner;
+class SmilesASTBuilder;
 }
 }
 
 %parse-param { SmilesTokenScanner& token_scanner }
+%parse-param { SmilesASTBuilder& ast_builder }
 %initial-action { @$.begin.column = 0; };
 
 %code {
+#include <charconv>
+
 #include "smiles_scanner.h"
 #include "smiles_parser.h"
 
 #undef yylex
 #define yylex token_scanner.lex
 
+[[nodiscard]] static size_t stoi(std::string_view s) {
+    size_t result;
+    std::from_chars(s.data(), s.data() + s.size(), result);
+    return result;
+}
 
 }
 
-%token NUMBER CHIRAL_TAG SIMPLE_ATOM NESTED_ATOM H_TOKEN ORGANIC_ATOM;
+%token <std::string_view> SIMPLE_ATOM NESTED_ATOM H_TOKEN ORGANIC_ATOM BIOVIA_ATOM CHIRAL_TAG NUMBER;
 
-%start mols
+%type <std::string_view> ring_number;
+%type <int> minus_signs plus_signs atom_charge explicit_h;
+
+
+%start mol
 
 %%
 /* --------------------------------------------------------------- */
-
-mols: mol
-    | mols '.' mol
-    ;
-
-/* --------------------------------------------------------------- */
 // FIX: mol MINUS DIGIT
-mol: seq;
-
-seq: atom
-   | seq atom
-   | seq bond atom
-   | seq ring_number
-   | seq bond ring_number
-   | seq '(' seq ')'
-   | seq '(' bond seq ')'
+mol: atom
+   | mol atom
+   | mol '.' atom
+   | mol bond atom
+   | mol ring_number
+   | mol bond ring_number
+   | mol '(' mol ')'
+   | mol '(' bond mol ')'
    ;
 
 /* --------------------------------------------------------------- */
@@ -71,68 +76,64 @@ bond: '-'
     ;
 
 /* --------------------------------------------------------------- */
-atom: SIMPLE_ATOM
-    | ORGANIC_ATOM
-    | '[' needs_sq_bracs ':' NUMBER ']'
+atom: simple_atom
+    | '[' needs_sq_bracs ':' atom_map_number ']'
     | '[' needs_sq_bracs ']'
     ;
 
-needs_sq_bracs: atom_that_can_have_charge
-              | atom_with_charge;
-/* --------------------------------------------------------------- */
-atom_with_charge: atom_that_can_have_charge atom_charge;
+atom_map_number: NUMBER { ast_builder.add_atom_map_number(stoi($1)); }
+
+needs_sq_bracs: atom_that_can_have_charge | atom_with_charge;
+
+atom_with_charge: atom_that_can_have_charge atom_charge {
+                                              ast_builder.add_atom_charge($2); }
 
 atom_charge: plus_signs
-           | '+' NUMBER
+           | '+' NUMBER { $$ = stoi($2); }
            | minus_signs
-           | '-' NUMBER
+           | '-' NUMBER { $$ = -1 * stoi($2); }
            ;
-plus_signs: '+'
-          | plus_signs '+'
-          ;
-minus_signs: '-'
-           | minus_signs '-'
-           ;
+plus_signs: '+' { $$ = 1; } | plus_signs '+' { $$ = $1 + 1; };
+minus_signs: '-' { $$ = -1; } | minus_signs '-' { $$ = $1 - 1; };
 
-atom_that_can_have_charge: atom_that_can_have_hydrogens
-                  | atom_with_hydrogens;
+atom_that_can_have_charge: atom_that_can_have_hydrogens | atom_with_hydrogens;
 
-/* --------------------------------------------------------------- */
-atom_with_hydrogens: atom_that_can_have_hydrogens H_TOKEN
-               | atom_that_can_have_hydrogens H_TOKEN NUMBER;
-               ;
+atom_with_hydrogens: atom_that_can_have_hydrogens explicit_h { ast_builder.add_explicit_h($2); };
 
-atom_that_can_have_hydrogens: H_TOKEN
-           | NUMBER H_TOKEN
+explicit_h: H_TOKEN { $$ = 1; } | H_TOKEN NUMBER { $$ = stoi($2); }
+
+atom_that_can_have_hydrogens: hydrogen_atom
            | element
            | chiral_element;
 
-/* --------------------------------------------------------------- */
-chiral_element:	element '@'
-              | element '@' '@'
-              | element CHIRAL_TAG
-              | element CHIRAL_TAG NUMBER
+
+hydrogen_atom: H_TOKEN { ast_builder.add_atom($1); }
+             | NUMBER H_TOKEN { ast_builder.add_atom($2);
+                                ast_builder.add_isotope_num(stoi($1)); }
+
+chiral_element:	element '@' { ast_builder.add_chirality_tag("@"); }
+              | element '@' '@' { ast_builder.add_chirality_tag("@@"); }
+              | element CHIRAL_TAG { ast_builder.add_chirality_class($2); }
+              | element CHIRAL_TAG NUMBER { ast_builder.add_chirality_class($2, $3); }
               ;
 
-/* --------------------------------------------------------------- */
-element: non_isotope
-       | isotope;
+element: non_isotope | isotope;
 
-isotope: NUMBER non_isotope;
+isotope: NUMBER non_isotope { ast_builder.add_isotope_num(stoi($1)); }
 
-non_isotope: SIMPLE_ATOM
-       |	ORGANIC_ATOM
-       |	NESTED_ATOM
-       |   '#' NUMBER
-       |    biovia_atom
+non_isotope: simple_atom
+       |	NESTED_ATOM { ast_builder.add_atom($1); }
+       |   '#' NUMBER { ast_builder.add_atom($2); }
+       |    BIOVIA_ATOM { ast_builder.add_atom($1); }
        ;
 
-biovia_atom: '\'' NESTED_ATOM '\''
+simple_atom: SIMPLE_ATOM { ast_builder.add_atom($1); }
+           | ORGANIC_ATOM { ast_builder.add_atom($1); }
+           ;
 
-/* --------------------------------------------------------------- */
-ring_number:  NUMBER
-           | '%' NUMBER
-           | '%' '(' NUMBER ')' '%'
+ring_number:  NUMBER { $$ = $1; }
+           | '%' NUMBER { $$ = $2; }
+           | '%' '(' NUMBER ')' '%' { $$ = $3; }
            ;
 
 %%

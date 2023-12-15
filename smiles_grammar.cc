@@ -42,7 +42,9 @@
 
 
 // Unqualified %code blocks.
-#line 25 "smiles_grammar.yy"
+#line 26 "smiles_grammar.yy"
+
+#include <charconv>
 
 #include "smiles_scanner.h"
 #include "smiles_parser.h"
@@ -50,9 +52,14 @@
 #undef yylex
 #define yylex token_scanner.lex
 
+[[nodiscard]] static size_t stoi(std::string_view s) {
+    size_t result;
+    std::from_chars(s.data(), s.data() + s.size(), result);
+    return result;
+}
 
 
-#line 56 "smiles_grammar.cc"
+#line 63 "smiles_grammar.cc"
 
 
 #ifndef YY_
@@ -145,17 +152,18 @@
 
 #line 5 "smiles_grammar.yy"
 namespace smiles_parser {
-#line 149 "smiles_grammar.cc"
+#line 156 "smiles_grammar.cc"
 
   /// Build a parser object.
-  SmilesTokenParser::SmilesTokenParser (SmilesTokenScanner& token_scanner_yyarg)
+  SmilesTokenParser::SmilesTokenParser (SmilesTokenScanner& token_scanner_yyarg, SmilesASTBuilder& ast_builder_yyarg)
 #if YYDEBUG
     : yydebug_ (false),
       yycdebug_ (&std::cerr),
 #else
     :
 #endif
-      token_scanner (token_scanner_yyarg)
+      token_scanner (token_scanner_yyarg),
+      ast_builder (ast_builder_yyarg)
   {}
 
   SmilesTokenParser::~SmilesTokenParser ()
@@ -177,6 +185,24 @@ namespace smiles_parser {
   {
     switch (this->kind ())
     {
+      case symbol_kind::S_atom_charge: // atom_charge
+      case symbol_kind::S_plus_signs: // plus_signs
+      case symbol_kind::S_minus_signs: // minus_signs
+      case symbol_kind::S_explicit_h: // explicit_h
+        value.copy< int > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_SIMPLE_ATOM: // SIMPLE_ATOM
+      case symbol_kind::S_NESTED_ATOM: // NESTED_ATOM
+      case symbol_kind::S_H_TOKEN: // H_TOKEN
+      case symbol_kind::S_ORGANIC_ATOM: // ORGANIC_ATOM
+      case symbol_kind::S_BIOVIA_ATOM: // BIOVIA_ATOM
+      case symbol_kind::S_CHIRAL_TAG: // CHIRAL_TAG
+      case symbol_kind::S_NUMBER: // NUMBER
+      case symbol_kind::S_ring_number: // ring_number
+        value.copy< std::string_view > (YY_MOVE (that.value));
+        break;
+
       default:
         break;
     }
@@ -208,6 +234,24 @@ namespace smiles_parser {
     super_type::move (s);
     switch (this->kind ())
     {
+      case symbol_kind::S_atom_charge: // atom_charge
+      case symbol_kind::S_plus_signs: // plus_signs
+      case symbol_kind::S_minus_signs: // minus_signs
+      case symbol_kind::S_explicit_h: // explicit_h
+        value.move< int > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_SIMPLE_ATOM: // SIMPLE_ATOM
+      case symbol_kind::S_NESTED_ATOM: // NESTED_ATOM
+      case symbol_kind::S_H_TOKEN: // H_TOKEN
+      case symbol_kind::S_ORGANIC_ATOM: // ORGANIC_ATOM
+      case symbol_kind::S_BIOVIA_ATOM: // BIOVIA_ATOM
+      case symbol_kind::S_CHIRAL_TAG: // CHIRAL_TAG
+      case symbol_kind::S_NUMBER: // NUMBER
+      case symbol_kind::S_ring_number: // ring_number
+        value.move< std::string_view > (YY_MOVE (s.value));
+        break;
+
       default:
         break;
     }
@@ -309,6 +353,24 @@ namespace smiles_parser {
   {
     switch (that.kind ())
     {
+      case symbol_kind::S_atom_charge: // atom_charge
+      case symbol_kind::S_plus_signs: // plus_signs
+      case symbol_kind::S_minus_signs: // minus_signs
+      case symbol_kind::S_explicit_h: // explicit_h
+        value.YY_MOVE_OR_COPY< int > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_SIMPLE_ATOM: // SIMPLE_ATOM
+      case symbol_kind::S_NESTED_ATOM: // NESTED_ATOM
+      case symbol_kind::S_H_TOKEN: // H_TOKEN
+      case symbol_kind::S_ORGANIC_ATOM: // ORGANIC_ATOM
+      case symbol_kind::S_BIOVIA_ATOM: // BIOVIA_ATOM
+      case symbol_kind::S_CHIRAL_TAG: // CHIRAL_TAG
+      case symbol_kind::S_NUMBER: // NUMBER
+      case symbol_kind::S_ring_number: // ring_number
+        value.YY_MOVE_OR_COPY< std::string_view > (YY_MOVE (that.value));
+        break;
+
       default:
         break;
     }
@@ -324,6 +386,24 @@ namespace smiles_parser {
   {
     switch (that.kind ())
     {
+      case symbol_kind::S_atom_charge: // atom_charge
+      case symbol_kind::S_plus_signs: // plus_signs
+      case symbol_kind::S_minus_signs: // minus_signs
+      case symbol_kind::S_explicit_h: // explicit_h
+        value.move< int > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_SIMPLE_ATOM: // SIMPLE_ATOM
+      case symbol_kind::S_NESTED_ATOM: // NESTED_ATOM
+      case symbol_kind::S_H_TOKEN: // H_TOKEN
+      case symbol_kind::S_ORGANIC_ATOM: // ORGANIC_ATOM
+      case symbol_kind::S_BIOVIA_ATOM: // BIOVIA_ATOM
+      case symbol_kind::S_CHIRAL_TAG: // CHIRAL_TAG
+      case symbol_kind::S_NUMBER: // NUMBER
+      case symbol_kind::S_ring_number: // ring_number
+        value.move< std::string_view > (YY_MOVE (that.value));
+        break;
+
       default:
         break;
     }
@@ -339,6 +419,24 @@ namespace smiles_parser {
     state = that.state;
     switch (that.kind ())
     {
+      case symbol_kind::S_atom_charge: // atom_charge
+      case symbol_kind::S_plus_signs: // plus_signs
+      case symbol_kind::S_minus_signs: // minus_signs
+      case symbol_kind::S_explicit_h: // explicit_h
+        value.copy< int > (that.value);
+        break;
+
+      case symbol_kind::S_SIMPLE_ATOM: // SIMPLE_ATOM
+      case symbol_kind::S_NESTED_ATOM: // NESTED_ATOM
+      case symbol_kind::S_H_TOKEN: // H_TOKEN
+      case symbol_kind::S_ORGANIC_ATOM: // ORGANIC_ATOM
+      case symbol_kind::S_BIOVIA_ATOM: // BIOVIA_ATOM
+      case symbol_kind::S_CHIRAL_TAG: // CHIRAL_TAG
+      case symbol_kind::S_NUMBER: // NUMBER
+      case symbol_kind::S_ring_number: // ring_number
+        value.copy< std::string_view > (that.value);
+        break;
+
       default:
         break;
     }
@@ -353,6 +451,24 @@ namespace smiles_parser {
     state = that.state;
     switch (that.kind ())
     {
+      case symbol_kind::S_atom_charge: // atom_charge
+      case symbol_kind::S_plus_signs: // plus_signs
+      case symbol_kind::S_minus_signs: // minus_signs
+      case symbol_kind::S_explicit_h: // explicit_h
+        value.move< int > (that.value);
+        break;
+
+      case symbol_kind::S_SIMPLE_ATOM: // SIMPLE_ATOM
+      case symbol_kind::S_NESTED_ATOM: // NESTED_ATOM
+      case symbol_kind::S_H_TOKEN: // H_TOKEN
+      case symbol_kind::S_ORGANIC_ATOM: // ORGANIC_ATOM
+      case symbol_kind::S_BIOVIA_ATOM: // BIOVIA_ATOM
+      case symbol_kind::S_CHIRAL_TAG: // CHIRAL_TAG
+      case symbol_kind::S_NUMBER: // NUMBER
+      case symbol_kind::S_ring_number: // ring_number
+        value.move< std::string_view > (that.value);
+        break;
+
       default:
         break;
     }
@@ -501,10 +617,10 @@ namespace smiles_parser {
 
 
     // User initialization code.
-#line 23 "smiles_grammar.yy"
+#line 24 "smiles_grammar.yy"
 { yyla.location.begin.column = 0; }
 
-#line 508 "smiles_grammar.cc"
+#line 624 "smiles_grammar.cc"
 
 
     /* Initialize the stack.  The initial state will be set in
@@ -618,6 +734,24 @@ namespace smiles_parser {
          when using variants.  */
       switch (yyr1_[yyn])
     {
+      case symbol_kind::S_atom_charge: // atom_charge
+      case symbol_kind::S_plus_signs: // plus_signs
+      case symbol_kind::S_minus_signs: // minus_signs
+      case symbol_kind::S_explicit_h: // explicit_h
+        yylhs.value.emplace< int > ();
+        break;
+
+      case symbol_kind::S_SIMPLE_ATOM: // SIMPLE_ATOM
+      case symbol_kind::S_NESTED_ATOM: // NESTED_ATOM
+      case symbol_kind::S_H_TOKEN: // H_TOKEN
+      case symbol_kind::S_ORGANIC_ATOM: // ORGANIC_ATOM
+      case symbol_kind::S_BIOVIA_ATOM: // BIOVIA_ATOM
+      case symbol_kind::S_CHIRAL_TAG: // CHIRAL_TAG
+      case symbol_kind::S_NUMBER: // NUMBER
+      case symbol_kind::S_ring_number: // ring_number
+        yylhs.value.emplace< std::string_view > ();
+        break;
+
       default:
         break;
     }
@@ -638,8 +772,178 @@ namespace smiles_parser {
         {
           switch (yyn)
             {
+  case 24: // atom_map_number: NUMBER
+#line 84 "smiles_grammar.yy"
+                        { ast_builder.add_atom_map_number(stoi(yystack_[0].value.as < std::string_view > ())); }
+#line 779 "smiles_grammar.cc"
+    break;
 
-#line 643 "smiles_grammar.cc"
+  case 27: // atom_with_charge: atom_that_can_have_charge atom_charge
+#line 88 "smiles_grammar.yy"
+                                                        {
+                                              ast_builder.add_atom_charge(yystack_[0].value.as < int > ()); }
+#line 786 "smiles_grammar.cc"
+    break;
+
+  case 28: // atom_charge: plus_signs
+#line 91 "smiles_grammar.yy"
+             { yylhs.value.as < int > () = yystack_[0].value.as < int > (); }
+#line 792 "smiles_grammar.cc"
+    break;
+
+  case 29: // atom_charge: '+' NUMBER
+#line 92 "smiles_grammar.yy"
+                        { yylhs.value.as < int > () = stoi(yystack_[0].value.as < std::string_view > ()); }
+#line 798 "smiles_grammar.cc"
+    break;
+
+  case 30: // atom_charge: minus_signs
+#line 93 "smiles_grammar.yy"
+             { yylhs.value.as < int > () = yystack_[0].value.as < int > (); }
+#line 804 "smiles_grammar.cc"
+    break;
+
+  case 31: // atom_charge: '-' NUMBER
+#line 94 "smiles_grammar.yy"
+                        { yylhs.value.as < int > () = -1 * stoi(yystack_[0].value.as < std::string_view > ()); }
+#line 810 "smiles_grammar.cc"
+    break;
+
+  case 32: // plus_signs: '+'
+#line 96 "smiles_grammar.yy"
+                { yylhs.value.as < int > () = 1; }
+#line 816 "smiles_grammar.cc"
+    break;
+
+  case 33: // plus_signs: plus_signs '+'
+#line 96 "smiles_grammar.yy"
+                                             { yylhs.value.as < int > () = yystack_[1].value.as < int > () + 1; }
+#line 822 "smiles_grammar.cc"
+    break;
+
+  case 34: // minus_signs: '-'
+#line 97 "smiles_grammar.yy"
+                 { yylhs.value.as < int > () = -1; }
+#line 828 "smiles_grammar.cc"
+    break;
+
+  case 35: // minus_signs: minus_signs '-'
+#line 97 "smiles_grammar.yy"
+                                                { yylhs.value.as < int > () = yystack_[1].value.as < int > () - 1; }
+#line 834 "smiles_grammar.cc"
+    break;
+
+  case 38: // atom_with_hydrogens: atom_that_can_have_hydrogens explicit_h
+#line 101 "smiles_grammar.yy"
+                                                             { ast_builder.add_explicit_h(yystack_[0].value.as < int > ()); }
+#line 840 "smiles_grammar.cc"
+    break;
+
+  case 39: // explicit_h: H_TOKEN
+#line 103 "smiles_grammar.yy"
+                    { yylhs.value.as < int > () = 1; }
+#line 846 "smiles_grammar.cc"
+    break;
+
+  case 40: // explicit_h: H_TOKEN NUMBER
+#line 103 "smiles_grammar.yy"
+                                                 { yylhs.value.as < int > () = stoi(yystack_[0].value.as < std::string_view > ()); }
+#line 852 "smiles_grammar.cc"
+    break;
+
+  case 44: // hydrogen_atom: H_TOKEN
+#line 110 "smiles_grammar.yy"
+                       { ast_builder.add_atom(yystack_[0].value.as < std::string_view > ()); }
+#line 858 "smiles_grammar.cc"
+    break;
+
+  case 45: // hydrogen_atom: NUMBER H_TOKEN
+#line 111 "smiles_grammar.yy"
+                              { ast_builder.add_atom(yystack_[0].value.as < std::string_view > ());
+                                ast_builder.add_isotope_num(stoi(yystack_[1].value.as < std::string_view > ())); }
+#line 865 "smiles_grammar.cc"
+    break;
+
+  case 46: // chiral_element: element '@'
+#line 114 "smiles_grammar.yy"
+                            { ast_builder.add_chirality_tag("@"); }
+#line 871 "smiles_grammar.cc"
+    break;
+
+  case 47: // chiral_element: element '@' '@'
+#line 115 "smiles_grammar.yy"
+                                { ast_builder.add_chirality_tag("@@"); }
+#line 877 "smiles_grammar.cc"
+    break;
+
+  case 48: // chiral_element: element CHIRAL_TAG
+#line 116 "smiles_grammar.yy"
+                                   { ast_builder.add_chirality_class(yystack_[0].value.as < std::string_view > ()); }
+#line 883 "smiles_grammar.cc"
+    break;
+
+  case 49: // chiral_element: element CHIRAL_TAG NUMBER
+#line 117 "smiles_grammar.yy"
+                                          { ast_builder.add_chirality_class(yystack_[1].value.as < std::string_view > (), yystack_[0].value.as < std::string_view > ()); }
+#line 889 "smiles_grammar.cc"
+    break;
+
+  case 52: // isotope: NUMBER non_isotope
+#line 122 "smiles_grammar.yy"
+                            { ast_builder.add_isotope_num(stoi(yystack_[1].value.as < std::string_view > ())); }
+#line 895 "smiles_grammar.cc"
+    break;
+
+  case 54: // non_isotope: NESTED_ATOM
+#line 125 "smiles_grammar.yy"
+                            { ast_builder.add_atom(yystack_[0].value.as < std::string_view > ()); }
+#line 901 "smiles_grammar.cc"
+    break;
+
+  case 55: // non_isotope: '#' NUMBER
+#line 126 "smiles_grammar.yy"
+                      { ast_builder.add_atom(yystack_[0].value.as < std::string_view > ()); }
+#line 907 "smiles_grammar.cc"
+    break;
+
+  case 56: // non_isotope: BIOVIA_ATOM
+#line 127 "smiles_grammar.yy"
+                        { ast_builder.add_atom(yystack_[0].value.as < std::string_view > ()); }
+#line 913 "smiles_grammar.cc"
+    break;
+
+  case 57: // simple_atom: SIMPLE_ATOM
+#line 130 "smiles_grammar.yy"
+                         { ast_builder.add_atom(yystack_[0].value.as < std::string_view > ()); }
+#line 919 "smiles_grammar.cc"
+    break;
+
+  case 58: // simple_atom: ORGANIC_ATOM
+#line 131 "smiles_grammar.yy"
+                          { ast_builder.add_atom(yystack_[0].value.as < std::string_view > ()); }
+#line 925 "smiles_grammar.cc"
+    break;
+
+  case 59: // ring_number: NUMBER
+#line 134 "smiles_grammar.yy"
+                     { yylhs.value.as < std::string_view > () = yystack_[0].value.as < std::string_view > (); }
+#line 931 "smiles_grammar.cc"
+    break;
+
+  case 60: // ring_number: '%' NUMBER
+#line 135 "smiles_grammar.yy"
+                        { yylhs.value.as < std::string_view > () = yystack_[0].value.as < std::string_view > (); }
+#line 937 "smiles_grammar.cc"
+    break;
+
+  case 61: // ring_number: '%' '(' NUMBER ')' '%'
+#line 136 "smiles_grammar.yy"
+                                    { yylhs.value.as < std::string_view > () = yystack_[2].value.as < std::string_view > (); }
+#line 943 "smiles_grammar.cc"
+    break;
+
+
+#line 947 "smiles_grammar.cc"
 
             default:
               break;
@@ -832,121 +1136,124 @@ namespace smiles_parser {
 
 
 
-  const signed char SmilesTokenParser::yypact_ninf_ = -28;
+  const signed char SmilesTokenParser::yypact_ninf_ = -26;
 
   const signed char SmilesTokenParser::yytable_ninf_ = -1;
 
   const signed char
   SmilesTokenParser::yypact_[] =
   {
-      85,   -28,   -28,    70,    25,   -28,    47,   -28,    74,   -28,
-     -28,   -28,   -28,     3,    17,    13,   -28,     5,   -28,    46,
-     -28,    20,   -28,   -28,   -28,   -28,    85,   -28,    89,    38,
-     -28,   -28,   -28,   -28,   -28,    59,    52,   -28,    55,     0,
-     -28,   -28,   -28,   -28,   -28,    57,    82,   -28,    83,    84,
-     -28,    65,    79,    92,    95,    67,   -28,    -1,    85,   -28,
-     -28,   -28,   -28,    96,   -28,   -28,   -28,    90,   -28,   -28,
-     -28,   -28,   -28,   -28,   -28,   -28,    27,   101,   -28,   -28,
-      87,   -28
+       3,   -26,   -26,    91,     2,   -26,   -26,   -26,   -26,   -26,
+     120,    -5,    12,   -26,    14,   -26,    25,   -26,   -26,     6,
+     -26,   -26,   -26,   -26,   -26,     3,    99,   -12,   -26,   -26,
+     -26,   -26,   -26,    21,    16,   -26,    47,    84,   -26,   -26,
+     -26,   -26,   -26,    31,   -26,    48,    51,   -26,    36,    49,
+      54,   -26,    55,    40,   -26,    32,     3,   -26,   -26,   -26,
+     -26,    58,   -26,   -26,   -26,    45,   -26,   -26,   -26,   -26,
+     -26,   -26,   -26,   -26,    62,    69,   -26,   -26,    59,   -26
   };
 
   const signed char
   SmilesTokenParser::yydefact_[] =
   {
-       0,    23,    24,     0,     0,     2,     4,     5,     0,    53,
-      55,    42,    54,     0,     0,     0,    28,    27,    39,    38,
-      45,    44,    51,    50,    57,     1,     0,    59,     0,    12,
-      13,    14,    15,    16,    17,     0,    20,    22,     0,     0,
-       6,     8,    43,    52,    56,     0,     0,    26,    36,    34,
-      29,    30,    32,    40,    48,    46,     3,     0,     0,    18,
-      19,    21,    60,     0,     7,     9,    58,     0,    33,    31,
-      35,    37,    41,    49,    47,    10,     0,     0,    25,    11,
-       0,    61
+       0,    57,    58,     0,     0,     2,    21,    54,    44,    56,
+       0,     0,     0,    26,    25,    37,    36,    41,    43,    42,
+      51,    50,    53,     1,    59,     0,     0,    10,    11,    12,
+      13,    14,    15,     0,    18,    20,     0,     0,     3,     6,
+      45,    52,    55,     0,    23,    34,    32,    27,    28,    30,
+      39,    38,    48,    46,     4,     0,     0,    16,    17,    19,
+      60,     0,     5,     7,    24,     0,    31,    29,    33,    35,
+      40,    49,    47,     8,     0,     0,    22,     9,     0,    61
   };
 
   const signed char
   SmilesTokenParser::yypgoto_[] =
   {
-     -28,   -28,    91,   -27,    88,    -6,   -28,   -28,   -28,   -28,
-     -28,   -28,   -28,   -28,   -28,   -28,   -28,   107,   -28,    80
+     -26,   -25,    65,    -4,   -26,   -26,   -26,   -26,   -26,   -26,
+     -26,   -26,   -26,   -26,   -26,   -26,   -26,   -26,    78,     0,
+      64
   };
 
   const signed char
   SmilesTokenParser::yydefgoto_[] =
   {
-       0,     4,     5,     6,    39,     7,    15,    16,    50,    51,
-      52,    17,    18,    19,    20,    21,    22,    23,    24,    41
+       0,     4,    37,     5,    65,    12,    13,    47,    48,    49,
+      14,    15,    51,    16,    17,    18,    19,    20,    21,     6,
+      39
   };
 
   const signed char
   SmilesTokenParser::yytable_[] =
   {
-      40,    57,    27,    27,     1,     1,    44,     2,     2,    28,
-      75,    29,    30,    31,    32,    33,    34,    48,    35,    36,
-      37,     3,     3,    45,    54,    25,    38,    38,    46,    49,
-      27,    76,     1,    64,    26,     2,    47,    28,    79,    29,
-      30,    31,    32,    33,    34,    55,    35,    36,    37,     3,
-      27,    40,     1,    53,    38,     2,    59,    28,    62,    29,
-      30,    31,    32,    33,    34,    63,    35,    36,    37,     3,
-      40,    60,    61,     8,    38,     9,    10,    11,    12,     9,
-      10,    42,    12,    66,    13,    67,    68,    69,    13,    70,
-       1,    71,    74,     2,     1,    72,    14,     2,    73,    77,
-      14,    29,    30,    31,    32,    33,    34,     3,    35,    36,
-      37,     3,    80,    78,    81,    43,    58,    56,     0,    65
+      38,    55,    23,    22,    42,     1,     1,    57,     2,     2,
+      22,    24,    25,    26,    52,    27,    28,    29,    30,    31,
+      32,    54,    33,    34,    35,     3,     3,    45,    43,    36,
+      50,    74,    53,    62,    58,     1,    44,    59,     2,    46,
+      64,    24,    25,    26,    73,    27,    28,    29,    30,    31,
+      32,    38,    33,    34,    35,     3,    60,    66,    61,    36,
+      67,    68,    69,    70,    71,     1,    72,    75,     2,    76,
+      38,    24,    25,    26,    77,    27,    28,    29,    30,    31,
+      32,    78,    33,    34,    35,     3,    79,     1,    41,    36,
+       2,    56,     0,    24,     1,     7,     8,     2,     9,     0,
+      10,    63,     1,     0,     0,     2,    11,     3,     0,     0,
+       0,    36,    27,    28,    29,    30,    31,    32,     0,    33,
+      34,    35,     3,     1,     7,    40,     2,     9,     0,     0,
+       0,     0,     0,     0,     0,    11
   };
 
   const signed char
   SmilesTokenParser::yycheck_[] =
   {
-       6,    28,     3,     3,     5,     5,     3,     8,     8,    10,
-      11,    12,    13,    14,    15,    16,    17,    12,    19,    20,
-      21,    22,    22,     6,     4,     0,    27,    27,    15,    24,
-       3,    58,     5,    39,     9,     8,    23,    10,    11,    12,
-      13,    14,    15,    16,    17,    25,    19,    20,    21,    22,
-       3,    57,     5,     7,    27,     8,    18,    10,     3,    12,
-      13,    14,    15,    16,    17,    10,    19,    20,    21,    22,
-      76,    12,    20,     3,    27,     5,     6,     7,     8,     5,
-       6,     7,     8,    26,    14,     3,     3,     3,    14,    24,
-       5,    12,    25,     8,     5,     3,    26,     8,     3,     3,
-      26,    12,    13,    14,    15,    16,    17,    22,    19,    20,
-      21,    22,    11,    23,    27,     8,    28,    26,    -1,    39
+       4,    26,     0,     3,     9,     3,     3,    19,     6,     6,
+      10,     9,    10,    11,     8,    13,    14,    15,    16,    17,
+      18,    25,    20,    21,    22,    23,    23,    13,    16,    27,
+       5,    56,    26,    37,    13,     3,    24,    21,     6,    25,
+       9,     9,    10,    11,    12,    13,    14,    15,    16,    17,
+      18,    55,    20,    21,    22,    23,     9,     9,    11,    27,
+       9,    25,    13,     9,     9,     3,    26,     9,     6,    24,
+      74,     9,    10,    11,    12,    13,    14,    15,    16,    17,
+      18,    12,    20,    21,    22,    23,    27,     3,    10,    27,
+       6,    26,    -1,     9,     3,     4,     5,     6,     7,    -1,
+       9,    37,     3,    -1,    -1,     6,    15,    23,    -1,    -1,
+      -1,    27,    13,    14,    15,    16,    17,    18,    -1,    20,
+      21,    22,    23,     3,     4,     5,     6,     7,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    15
   };
 
   const signed char
   SmilesTokenParser::yystos_[] =
   {
-       0,     5,     8,    22,    29,    30,    31,    33,     3,     5,
-       6,     7,     8,    14,    26,    34,    35,    39,    40,    41,
-      42,    43,    44,    45,    46,     0,     9,     3,    10,    12,
-      13,    14,    15,    16,    17,    19,    20,    21,    27,    32,
-      33,    47,     7,    45,     3,     6,    15,    23,    12,    24,
-      36,    37,    38,     7,     4,    25,    30,    31,    32,    18,
-      12,    20,     3,    10,    33,    47,    26,     3,     3,     3,
-      24,    12,     3,     3,    25,    11,    31,     3,    23,    11,
-      11,    27
+       0,     3,     6,    23,    29,    31,    47,     4,     5,     7,
+       9,    15,    33,    34,    38,    39,    41,    42,    43,    44,
+      45,    46,    47,     0,     9,    10,    11,    13,    14,    15,
+      16,    17,    18,    20,    21,    22,    27,    30,    31,    48,
+       5,    46,     9,    16,    24,    13,    25,    35,    36,    37,
+       5,    40,     8,    26,    31,    29,    30,    19,    13,    21,
+       9,    11,    31,    48,     9,    32,     9,     9,    25,    13,
+       9,     9,    26,    12,    29,     9,    24,    12,    12,    27
   };
 
   const signed char
   SmilesTokenParser::yyr1_[] =
   {
-       0,    28,    29,    29,    30,    31,    31,    31,    31,    31,
-      31,    31,    32,    32,    32,    32,    32,    32,    32,    32,
-      32,    32,    32,    33,    33,    33,    33,    34,    34,    35,
-      36,    36,    36,    36,    37,    37,    38,    38,    39,    39,
-      40,    40,    41,    41,    41,    41,    42,    42,    42,    42,
-      43,    43,    44,    45,    45,    45,    45,    45,    46,    47,
-      47,    47
+       0,    28,    29,    29,    29,    29,    29,    29,    29,    29,
+      30,    30,    30,    30,    30,    30,    30,    30,    30,    30,
+      30,    31,    31,    31,    32,    33,    33,    34,    35,    35,
+      35,    35,    36,    36,    37,    37,    38,    38,    39,    40,
+      40,    41,    41,    41,    42,    42,    43,    43,    43,    43,
+      44,    44,    45,    46,    46,    46,    46,    47,    47,    48,
+      48,    48
   };
 
   const signed char
   SmilesTokenParser::yyr2_[] =
   {
-       0,     2,     1,     3,     1,     1,     2,     3,     2,     3,
-       4,     5,     1,     1,     1,     1,     1,     1,     2,     2,
-       1,     2,     1,     1,     1,     5,     3,     1,     1,     2,
-       1,     2,     1,     2,     1,     2,     1,     2,     1,     1,
-       2,     3,     1,     2,     1,     1,     2,     3,     2,     3,
-       1,     1,     2,     1,     1,     1,     2,     1,     3,     1,
+       0,     2,     1,     2,     3,     3,     2,     3,     4,     5,
+       1,     1,     1,     1,     1,     1,     2,     2,     1,     2,
+       1,     1,     5,     3,     1,     1,     1,     2,     1,     2,
+       1,     2,     1,     2,     1,     2,     1,     1,     2,     1,
+       2,     1,     1,     1,     1,     2,     2,     3,     2,     3,
+       1,     1,     2,     1,     1,     2,     1,     1,     1,     1,
        2,     5
   };
 
@@ -957,14 +1264,15 @@ namespace smiles_parser {
   const char*
   const SmilesTokenParser::yytname_[] =
   {
-  "\"end of file\"", "error", "\"invalid token\"", "NUMBER", "CHIRAL_TAG",
-  "SIMPLE_ATOM", "NESTED_ATOM", "H_TOKEN", "ORGANIC_ATOM", "'.'", "'('",
-  "')'", "'-'", "'='", "'#'", "':'", "'$'", "'~'", "'>'", "'<'", "'\\\\'",
-  "'/'", "'['", "']'", "'+'", "'@'", "'\\''", "'%'", "$accept", "mols",
-  "mol", "seq", "bond", "atom", "needs_sq_bracs", "atom_with_charge",
-  "atom_charge", "plus_signs", "minus_signs", "atom_that_can_have_charge",
-  "atom_with_hydrogens", "atom_that_can_have_hydrogens", "chiral_element",
-  "element", "isotope", "non_isotope", "biovia_atom", "ring_number", YY_NULLPTR
+  "\"end of file\"", "error", "\"invalid token\"", "SIMPLE_ATOM",
+  "NESTED_ATOM", "H_TOKEN", "ORGANIC_ATOM", "BIOVIA_ATOM", "CHIRAL_TAG",
+  "NUMBER", "'.'", "'('", "')'", "'-'", "'='", "'#'", "':'", "'$'", "'~'",
+  "'>'", "'<'", "'\\\\'", "'/'", "'['", "']'", "'+'", "'@'", "'%'",
+  "$accept", "mol", "bond", "atom", "atom_map_number", "needs_sq_bracs",
+  "atom_with_charge", "atom_charge", "plus_signs", "minus_signs",
+  "atom_that_can_have_charge", "atom_with_hydrogens", "explicit_h",
+  "atom_that_can_have_hydrogens", "hydrogen_atom", "chiral_element",
+  "element", "isotope", "non_isotope", "simple_atom", "ring_number", YY_NULLPTR
   };
 #endif
 
@@ -973,13 +1281,13 @@ namespace smiles_parser {
   const unsigned char
   SmilesTokenParser::yyrline_[] =
   {
-       0,    42,    42,    43,    48,    50,    51,    52,    53,    54,
-      55,    56,    60,    61,    62,    63,    64,    65,    66,    67,
-      68,    69,    70,    74,    75,    76,    77,    80,    81,    83,
-      85,    86,    87,    88,    90,    91,    93,    94,    97,    98,
-     101,   102,   105,   106,   107,   108,   111,   112,   113,   114,
-     118,   119,   121,   123,   124,   125,   126,   127,   130,   133,
-     134,   135
+       0,    54,    54,    55,    56,    57,    58,    59,    60,    61,
+      65,    66,    67,    68,    69,    70,    71,    72,    73,    74,
+      75,    79,    80,    81,    84,    86,    86,    88,    91,    92,
+      93,    94,    96,    96,    97,    97,    99,    99,   101,   103,
+     103,   105,   106,   107,   110,   111,   114,   115,   116,   117,
+     120,   120,   122,   124,   125,   126,   127,   130,   131,   134,
+     135,   136
   };
 
   void
@@ -1021,16 +1329,16 @@ namespace smiles_parser {
        0,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,    14,    16,    27,     2,    26,
-      10,    11,     2,    24,     2,    12,     9,    21,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,    15,     2,
-      19,    13,    18,     2,    25,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,    15,    17,    27,     2,     2,
+      11,    12,     2,    25,     2,    13,    10,    22,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,    16,     2,
+      20,    14,    19,     2,    26,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,    22,    20,    23,     2,     2,     2,     2,     2,     2,
+       2,    23,    21,    24,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,    17,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,    18,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -1044,10 +1352,10 @@ namespace smiles_parser {
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5,     6,     7,     8
+       5,     6,     7,     8,     9
     };
     // Last valid token kind.
-    const int code_max = 263;
+    const int code_max = 264;
 
     if (t <= 0)
       return symbol_kind::S_YYEOF;
@@ -1059,9 +1367,9 @@ namespace smiles_parser {
 
 #line 5 "smiles_grammar.yy"
 } // smiles_parser
-#line 1063 "smiles_grammar.cc"
+#line 1371 "smiles_grammar.cc"
 
-#line 138 "smiles_grammar.yy"
+#line 139 "smiles_grammar.yy"
 
 
 void smiles_parser::SmilesTokenParser::error(const location& loc, const std::string& msg) {
