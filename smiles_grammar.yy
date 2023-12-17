@@ -57,7 +57,6 @@ namespace {
 
 %token <std::string_view> ATOM_SYMBOL NESTED_ATOM H_TOKEN ORGANIC_ATOM BIOVIA_ATOM CHIRAL_TAG NUMBER;
 
-%type <std::string_view> ring_number;
 %type <int> minus_signs plus_signs atom_charge explicit_h;
 %type <mol_info> mol;
 
@@ -147,9 +146,9 @@ simple_atom: ATOM_SYMBOL { ast_builder.add_atom($1); }
            | ORGANIC_ATOM { ast_builder.add_atom($1); }
            ;
 
-ring_number:  NUMBER { $$ = $1; }
-           | '%' NUMBER { $$ = $2; }
-           | '%' '(' NUMBER ')' { $$ = $3; }
+ring_number:  NUMBER { ast_builder.add_ring_atom($1, ast_builder.get_num_atoms()); }
+           | '%' NUMBER { ast_builder.add_ring_atom($2, ast_builder.get_num_atoms(), true); }
+           | '%' '(' NUMBER ')' { ast_builder.add_ring_atom($3, ast_builder.get_num_atoms(), true); }
            ;
 
 %%

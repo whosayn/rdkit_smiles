@@ -412,7 +412,6 @@ namespace smiles_parser {
       // BIOVIA_ATOM
       // CHIRAL_TAG
       // NUMBER
-      // ring_number
       char dummy3[sizeof (std::string_view)];
     };
 
@@ -591,7 +590,6 @@ namespace smiles_parser {
       case symbol_kind::S_BIOVIA_ATOM: // BIOVIA_ATOM
       case symbol_kind::S_CHIRAL_TAG: // CHIRAL_TAG
       case symbol_kind::S_NUMBER: // NUMBER
-      case symbol_kind::S_ring_number: // ring_number
         value.move< std::string_view > (std::move (that.value));
         break;
 
@@ -702,7 +700,6 @@ switch (yykind)
       case symbol_kind::S_BIOVIA_ATOM: // BIOVIA_ATOM
       case symbol_kind::S_CHIRAL_TAG: // CHIRAL_TAG
       case symbol_kind::S_NUMBER: // NUMBER
-      case symbol_kind::S_ring_number: // ring_number
         value.template destroy< std::string_view > ();
         break;
 
@@ -1333,7 +1330,7 @@ switch (yykind)
 
 #line 5 "smiles_grammar.yy"
 } // smiles_parser
-#line 1337 "smiles_grammar.hh"
+#line 1334 "smiles_grammar.hh"
 
 
 

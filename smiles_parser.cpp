@@ -53,7 +53,25 @@ void SmilesASTBuilder::add_bond(size_t atom1, size_t atom2, std::string_view bon
     d_mol.bonds.push_back({atom1, atom2, bond_token});
 }
 
-void SmilesASTBuilder::add_ring(){}
+void SmilesASTBuilder::add_ring_atom(std::string_view ring_number, size_t atom, bool use_as_is) {
+    // NOTE: if the ring number consists of multiple numbers, we should count
+    // each number as a separate ring. This doesn't apply to '10' or when the token
+    // follows a '%' token
+    if (use_as_is) {
+        d_mol.rings.push_back({ring_number, atom});
+        return;
+    }
+
+    // Checking for 10
+    if (ring_number.size() == 2 && ring_number[1] == '0') {
+        d_mol.rings.push_back({ring_number, atom});
+        return;
+    }
+
+    for (size_t i = 0; i < ring_number.size(); ++i) {
+        d_mol.rings.push_back({ring_number.substr(i, 1)});
+    }
+}
 
 MolInfo SmilesASTBuilder::finalize() {
     auto mol = std::exchange(d_mol, {});
@@ -80,10 +98,9 @@ void parse(std::string_view val) {
     }
 
     for (auto& bond : mol.bonds) {
-        std::cout << mol.atoms[bond.begin_atom-1].name << "->" <<
-        mol.atoms[bond.end_atom-1].name << std::endl;
+        std::cout << mol.atoms[bond.begin_atom-1].name << "->" << mol.atoms[bond.end_atom-1].name << std::endl;
     }
 
-    std::cout << val << ": " << count << ": " << mol.bonds.size() << std::endl;
+    std::cout << val << ": " << count << ": " << mol.bonds.size() << ": " << (mol.rings.size()  / 2) << std::endl;
 }
 }
