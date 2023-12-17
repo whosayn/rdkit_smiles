@@ -199,7 +199,7 @@ namespace smiles_parser {
         value.copy< mol_info > (YY_MOVE (that.value));
         break;
 
-      case symbol_kind::S_SIMPLE_ATOM: // SIMPLE_ATOM
+      case symbol_kind::S_ATOM_SYMBOL: // ATOM_SYMBOL
       case symbol_kind::S_NESTED_ATOM: // NESTED_ATOM
       case symbol_kind::S_H_TOKEN: // H_TOKEN
       case symbol_kind::S_ORGANIC_ATOM: // ORGANIC_ATOM
@@ -252,7 +252,7 @@ namespace smiles_parser {
         value.move< mol_info > (YY_MOVE (s.value));
         break;
 
-      case symbol_kind::S_SIMPLE_ATOM: // SIMPLE_ATOM
+      case symbol_kind::S_ATOM_SYMBOL: // ATOM_SYMBOL
       case symbol_kind::S_NESTED_ATOM: // NESTED_ATOM
       case symbol_kind::S_H_TOKEN: // H_TOKEN
       case symbol_kind::S_ORGANIC_ATOM: // ORGANIC_ATOM
@@ -375,7 +375,7 @@ namespace smiles_parser {
         value.YY_MOVE_OR_COPY< mol_info > (YY_MOVE (that.value));
         break;
 
-      case symbol_kind::S_SIMPLE_ATOM: // SIMPLE_ATOM
+      case symbol_kind::S_ATOM_SYMBOL: // ATOM_SYMBOL
       case symbol_kind::S_NESTED_ATOM: // NESTED_ATOM
       case symbol_kind::S_H_TOKEN: // H_TOKEN
       case symbol_kind::S_ORGANIC_ATOM: // ORGANIC_ATOM
@@ -412,7 +412,7 @@ namespace smiles_parser {
         value.move< mol_info > (YY_MOVE (that.value));
         break;
 
-      case symbol_kind::S_SIMPLE_ATOM: // SIMPLE_ATOM
+      case symbol_kind::S_ATOM_SYMBOL: // ATOM_SYMBOL
       case symbol_kind::S_NESTED_ATOM: // NESTED_ATOM
       case symbol_kind::S_H_TOKEN: // H_TOKEN
       case symbol_kind::S_ORGANIC_ATOM: // ORGANIC_ATOM
@@ -449,7 +449,7 @@ namespace smiles_parser {
         value.copy< mol_info > (that.value);
         break;
 
-      case symbol_kind::S_SIMPLE_ATOM: // SIMPLE_ATOM
+      case symbol_kind::S_ATOM_SYMBOL: // ATOM_SYMBOL
       case symbol_kind::S_NESTED_ATOM: // NESTED_ATOM
       case symbol_kind::S_H_TOKEN: // H_TOKEN
       case symbol_kind::S_ORGANIC_ATOM: // ORGANIC_ATOM
@@ -485,7 +485,7 @@ namespace smiles_parser {
         value.move< mol_info > (that.value);
         break;
 
-      case symbol_kind::S_SIMPLE_ATOM: // SIMPLE_ATOM
+      case symbol_kind::S_ATOM_SYMBOL: // ATOM_SYMBOL
       case symbol_kind::S_NESTED_ATOM: // NESTED_ATOM
       case symbol_kind::S_H_TOKEN: // H_TOKEN
       case symbol_kind::S_ORGANIC_ATOM: // ORGANIC_ATOM
@@ -772,7 +772,7 @@ namespace smiles_parser {
         yylhs.value.emplace< mol_info > ();
         break;
 
-      case symbol_kind::S_SIMPLE_ATOM: // SIMPLE_ATOM
+      case symbol_kind::S_ATOM_SYMBOL: // ATOM_SYMBOL
       case symbol_kind::S_NESTED_ATOM: // NESTED_ATOM
       case symbol_kind::S_H_TOKEN: // H_TOKEN
       case symbol_kind::S_ORGANIC_ATOM: // ORGANIC_ATOM
@@ -991,7 +991,7 @@ namespace smiles_parser {
 #line 992 "smiles_grammar.cc"
     break;
 
-  case 57: // simple_atom: SIMPLE_ATOM
+  case 57: // simple_atom: ATOM_SYMBOL
 #line 146 "smiles_grammar.yy"
                          { ast_builder.add_atom(yystack_[0].value.as < std::string_view > ()); }
 #line 998 "smiles_grammar.cc"
@@ -1343,7 +1343,7 @@ namespace smiles_parser {
   const char*
   const SmilesTokenParser::yytname_[] =
   {
-  "\"end of file\"", "error", "\"invalid token\"", "SIMPLE_ATOM",
+  "\"end of file\"", "error", "\"invalid token\"", "ATOM_SYMBOL",
   "NESTED_ATOM", "H_TOKEN", "ORGANIC_ATOM", "BIOVIA_ATOM", "CHIRAL_TAG",
   "NUMBER", "'.'", "'('", "')'", "'-'", "'='", "'#'", "':'", "'$'", "'~'",
   "'>'", "'<'", "'\\\\'", "'/'", "'['", "']'", "'+'", "'@'", "'%'",

@@ -32,19 +32,17 @@
 <*>B|C|N|O|P|S|F|Cl|Br|I { return token::ORGANIC_ATOM; }
 
 
-<*>[a-z]  { return token::SIMPLE_ATOM; }
+<*>[a-z]  { return token::ATOM_SYMBOL; }
 <IN_ATOM_STATE>[A-Z][a-z]*? {  return token::NESTED_ATOM ; }
 <IN_ATOM_STATE>si|as|se|te { return token::NESTED_ATOM; }
 <IN_ATOM_STATE>\'[A-Z][a-z]*?\' {  return token::BIOVIA_ATOM ; }
 
 @[' ']*[A-Z][A-Z] {  return token::CHIRAL_TAG;}
-\[  { BEGIN IN_ATOM_STATE;  return yytext[0]; }
-
+<INITIAL>\[  { BEGIN IN_ATOM_STATE;  return yytext[0]; }
 
 <IN_ATOM_STATE>\]	{ BEGIN INITIAL; return yytext[0]; }
-<IN_ATOM_STATE>. 	{  return yytext[0]; }
 
-.		{  return yytext[0]; }
+<*>.		{  return yytext[0]; }
 <<EOF>>		{ return token::YYEOF; }
 
 %%

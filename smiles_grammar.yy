@@ -55,7 +55,7 @@ namespace {
 
 }
 
-%token <std::string_view> SIMPLE_ATOM NESTED_ATOM H_TOKEN ORGANIC_ATOM BIOVIA_ATOM CHIRAL_TAG NUMBER;
+%token <std::string_view> ATOM_SYMBOL NESTED_ATOM H_TOKEN ORGANIC_ATOM BIOVIA_ATOM CHIRAL_TAG NUMBER;
 
 %type <std::string_view> ring_number;
 %type <int> minus_signs plus_signs atom_charge explicit_h;
@@ -143,7 +143,7 @@ non_isotope: simple_atom
        |    BIOVIA_ATOM { ast_builder.add_atom($1); }
        ;
 
-simple_atom: SIMPLE_ATOM { ast_builder.add_atom($1); }
+simple_atom: ATOM_SYMBOL { ast_builder.add_atom($1); }
            | ORGANIC_ATOM { ast_builder.add_atom($1); }
            ;
 

@@ -57,6 +57,9 @@ void SmilesASTBuilder::add_ring(){}
 
 MolInfo SmilesASTBuilder::finalize() {
     auto mol = std::exchange(d_mol, {});
+    std::sort(mol.bonds.begin(), mol.bonds.end(), [](auto& b1, auto& b2) {
+            return  b1.end_atom < b2.end_atom;
+            });
     return mol;
 }
 
@@ -77,7 +80,8 @@ void parse(std::string_view val) {
     }
 
     for (auto& bond : mol.bonds) {
-        std::cout << bond.begin_atom << "->" << bond.end_atom << std::endl;
+        std::cout << mol.atoms[bond.begin_atom-1].name << "->" <<
+        mol.atoms[bond.end_atom-1].name << std::endl;
     }
 
     std::cout << val << ": " << count << ": " << mol.bonds.size() << std::endl;

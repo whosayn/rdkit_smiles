@@ -405,7 +405,7 @@ namespace smiles_parser {
       // mol
       char dummy2[sizeof (mol_info)];
 
-      // SIMPLE_ATOM
+      // ATOM_SYMBOL
       // NESTED_ATOM
       // H_TOKEN
       // ORGANIC_ATOM
@@ -463,7 +463,7 @@ namespace smiles_parser {
     YYEOF = 0,                     // "end of file"
     YYerror = 256,                 // error
     YYUNDEF = 257,                 // "invalid token"
-    SIMPLE_ATOM = 258,             // SIMPLE_ATOM
+    ATOM_SYMBOL = 258,             // ATOM_SYMBOL
     NESTED_ATOM = 259,             // NESTED_ATOM
     H_TOKEN = 260,                 // H_TOKEN
     ORGANIC_ATOM = 261,            // ORGANIC_ATOM
@@ -491,7 +491,7 @@ namespace smiles_parser {
         S_YYEOF = 0,                             // "end of file"
         S_YYerror = 1,                           // error
         S_YYUNDEF = 2,                           // "invalid token"
-        S_SIMPLE_ATOM = 3,                       // SIMPLE_ATOM
+        S_ATOM_SYMBOL = 3,                       // ATOM_SYMBOL
         S_NESTED_ATOM = 4,                       // NESTED_ATOM
         S_H_TOKEN = 5,                           // H_TOKEN
         S_ORGANIC_ATOM = 6,                      // ORGANIC_ATOM
@@ -584,7 +584,7 @@ namespace smiles_parser {
         value.move< mol_info > (std::move (that.value));
         break;
 
-      case symbol_kind::S_SIMPLE_ATOM: // SIMPLE_ATOM
+      case symbol_kind::S_ATOM_SYMBOL: // ATOM_SYMBOL
       case symbol_kind::S_NESTED_ATOM: // NESTED_ATOM
       case symbol_kind::S_H_TOKEN: // H_TOKEN
       case symbol_kind::S_ORGANIC_ATOM: // ORGANIC_ATOM
@@ -695,7 +695,7 @@ switch (yykind)
         value.template destroy< mol_info > ();
         break;
 
-      case symbol_kind::S_SIMPLE_ATOM: // SIMPLE_ATOM
+      case symbol_kind::S_ATOM_SYMBOL: // ATOM_SYMBOL
       case symbol_kind::S_NESTED_ATOM: // NESTED_ATOM
       case symbol_kind::S_H_TOKEN: // H_TOKEN
       case symbol_kind::S_ORGANIC_ATOM: // ORGANIC_ATOM
@@ -912,16 +912,16 @@ switch (yykind)
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_SIMPLE_ATOM (std::string_view v, location_type l)
+      make_ATOM_SYMBOL (std::string_view v, location_type l)
       {
-        return symbol_type (token::SIMPLE_ATOM, std::move (v), std::move (l));
+        return symbol_type (token::ATOM_SYMBOL, std::move (v), std::move (l));
       }
 #else
       static
       symbol_type
-      make_SIMPLE_ATOM (const std::string_view& v, const location_type& l)
+      make_ATOM_SYMBOL (const std::string_view& v, const location_type& l)
       {
-        return symbol_type (token::SIMPLE_ATOM, v, l);
+        return symbol_type (token::ATOM_SYMBOL, v, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
