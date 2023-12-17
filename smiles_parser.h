@@ -28,8 +28,9 @@ struct BondInfo {
 
 // idk what info is needed yet
 struct RingInfo {
-    std::string_view rung_number;
+    std::string_view ring_number;
     size_t atom;
+    std::string_view bond_token;
 };
 
 struct MolInfo {
@@ -59,7 +60,7 @@ class SmilesASTBuilder {
 
         void add_bond(size_t atom1, size_t atom2, std::string_view bond_token = {"-"});
 
-        void add_ring_atom(std::string_view ring_number, size_t atom, bool use_as_is = false);
+        void add_ring_info(std::string_view ring_number, std::string_view bond_token, bool use_as_is = false);
         MolInfo finalize();
    private:
         MolInfo d_mol;

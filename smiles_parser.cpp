@@ -53,23 +53,29 @@ void SmilesASTBuilder::add_bond(size_t atom1, size_t atom2, std::string_view bon
     d_mol.bonds.push_back({atom1, atom2, bond_token});
 }
 
-void SmilesASTBuilder::add_ring_atom(std::string_view ring_number, size_t atom, bool use_as_is) {
+// NOTE: Add test about this example i.e what bond determines the bond type of the closing bond
+// >>> Chem.MolToSmiles(Chem.MolFromSmiles("c-1ccc=1"))
+// 'C1=CC=C1'
+// >>> Chem.MolToSmiles(Chem.MolFromSmiles("c=1ccc-1"))
+// 'C1=C=CC=1'
+void SmilesASTBuilder::add_ring_info(std::string_view ring_number, std::string_view bond_token, bool use_as_is) {
+    auto ring_atom = get_num_atoms();
     // NOTE: if the ring number consists of multiple numbers, we should count
     // each number as a separate ring. This doesn't apply to '10' or when the token
     // follows a '%' token
     if (use_as_is) {
-        d_mol.rings.push_back({ring_number, atom});
+        d_mol.rings.push_back({ring_number, ring_atom, bond_token});
         return;
     }
 
     // Checking for 10
     if (ring_number.size() == 2 && ring_number[1] == '0') {
-        d_mol.rings.push_back({ring_number, atom});
+        d_mol.rings.push_back({ring_number, ring_atom, bond_token});
         return;
     }
 
     for (size_t i = 0; i < ring_number.size(); ++i) {
-        d_mol.rings.push_back({ring_number.substr(i, 1)});
+        d_mol.rings.push_back({ring_number.substr(i, 1), ring_atom, bond_token});
     }
 }
 
@@ -98,7 +104,12 @@ void parse(std::string_view val) {
     }
 
     for (auto& bond : mol.bonds) {
-        std::cout << mol.atoms[bond.begin_atom-1].name << "->" << mol.atoms[bond.end_atom-1].name << std::endl;
+        std::cout << mol.atoms[bond.begin_atom-1].name << bond.bond_token << mol.atoms[bond.end_atom-1].name << std::endl;
+    }
+
+
+    for (auto& ring : mol.rings) {
+        std::cout << "ring: " << ring.bond_token << std::endl;
     }
 
     std::cout << val << ": " << count << ": " << mol.bonds.size() << ": " << (mol.rings.size()  / 2) << std::endl;

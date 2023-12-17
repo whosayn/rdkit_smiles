@@ -405,6 +405,9 @@ namespace smiles_parser {
       // mol
       char dummy2[sizeof (mol_info)];
 
+      // ring_number
+      char dummy3[sizeof (std::pair<std::string_view, bool>)];
+
       // ATOM_SYMBOL
       // NESTED_ATOM
       // H_TOKEN
@@ -412,7 +415,8 @@ namespace smiles_parser {
       // BIOVIA_ATOM
       // CHIRAL_TAG
       // NUMBER
-      char dummy3[sizeof (std::string_view)];
+      // bond
+      char dummy4[sizeof (std::string_view)];
     };
 
     /// The size of the largest semantic type.
@@ -583,6 +587,10 @@ namespace smiles_parser {
         value.move< mol_info > (std::move (that.value));
         break;
 
+      case symbol_kind::S_ring_number: // ring_number
+        value.move< std::pair<std::string_view, bool> > (std::move (that.value));
+        break;
+
       case symbol_kind::S_ATOM_SYMBOL: // ATOM_SYMBOL
       case symbol_kind::S_NESTED_ATOM: // NESTED_ATOM
       case symbol_kind::S_H_TOKEN: // H_TOKEN
@@ -590,6 +598,7 @@ namespace smiles_parser {
       case symbol_kind::S_BIOVIA_ATOM: // BIOVIA_ATOM
       case symbol_kind::S_CHIRAL_TAG: // CHIRAL_TAG
       case symbol_kind::S_NUMBER: // NUMBER
+      case symbol_kind::S_bond: // bond
         value.move< std::string_view > (std::move (that.value));
         break;
 
@@ -645,6 +654,20 @@ namespace smiles_parser {
 #endif
 
 #if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, std::pair<std::string_view, bool>&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const std::pair<std::string_view, bool>& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
       basic_symbol (typename Base::kind_type t, std::string_view&& v, location_type&& l)
         : Base (t)
         , value (std::move (v))
@@ -693,6 +716,10 @@ switch (yykind)
         value.template destroy< mol_info > ();
         break;
 
+      case symbol_kind::S_ring_number: // ring_number
+        value.template destroy< std::pair<std::string_view, bool> > ();
+        break;
+
       case symbol_kind::S_ATOM_SYMBOL: // ATOM_SYMBOL
       case symbol_kind::S_NESTED_ATOM: // NESTED_ATOM
       case symbol_kind::S_H_TOKEN: // H_TOKEN
@@ -700,6 +727,7 @@ switch (yykind)
       case symbol_kind::S_BIOVIA_ATOM: // BIOVIA_ATOM
       case symbol_kind::S_CHIRAL_TAG: // CHIRAL_TAG
       case symbol_kind::S_NUMBER: // NUMBER
+      case symbol_kind::S_bond: // bond
         value.template destroy< std::string_view > ();
         break;
 
@@ -1330,7 +1358,7 @@ switch (yykind)
 
 #line 5 "smiles_grammar.yy"
 } // smiles_parser
-#line 1334 "smiles_grammar.hh"
+#line 1362 "smiles_grammar.hh"
 
 
 

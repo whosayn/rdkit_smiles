@@ -57,6 +57,8 @@ namespace {
 
 %token <std::string_view> ATOM_SYMBOL NESTED_ATOM H_TOKEN ORGANIC_ATOM BIOVIA_ATOM CHIRAL_TAG NUMBER;
 
+%type <std::pair<std::string_view, bool>> ring_number;
+%type <std::string_view> bond;
 %type <int> minus_signs plus_signs atom_charge explicit_h;
 %type <mol_info> mol;
 
@@ -68,26 +70,26 @@ namespace {
 // FIX: mol MINUS DIGIT
 mol: atom {  auto i = ast_builder.get_num_atoms(); $$ = { i, i, 1}; }
    | mol atom  { $$ = $1;  $$.tail = $$.head + $$.size; ast_builder.add_bond($1.tail, $$.tail); ++$$.size; }
-   | mol '.' atom  { $$ = $1;  $$.tail = $$.head + $$.size; ast_builder.add_bond($1.tail, $$.tail); ++$$.size; }
-   | mol bond atom  { $$ = $1; ast_builder.add_bond($$.tail, ++$$.tail); ++$$.size; }
-   | mol ring_number  { $$ = $1; }
-   | mol bond ring_number { $$ = $1; }
+   | mol '.' atom  { $$ = $1;  $$.tail = $$.head + $$.size; ++$$.size; }
+   | mol bond atom  { $$ = $1; ast_builder.add_bond($$.tail, ++$$.tail, $2); ++$$.size; }
+   | mol ring_number  { $$ = $1; ast_builder.add_ring_info($2.first, "-", $2.second); }
+   | mol bond ring_number { $$ = $1; ast_builder.add_ring_info($3.first, $2, $3.second); }
    | mol '(' mol ')'  { $$ = $1; ast_builder.add_bond($1.tail, $3.head); $$.size += $3.size; }
-   | mol '(' bond mol ')'  { $$ = $1; ast_builder.add_bond($1.tail, $4.head); $$.size += $4.size; }
+   | mol '(' bond mol ')'  { $$ = $1; ast_builder.add_bond($1.tail, $4.head, $3); $$.size += $4.size; }
    ;
 
 /* --------------------------------------------------------------- */
-bond: '-'
-    | '='
-    | '#'
-    | ':'
-    | '$'
-    | '~'
-    | '-' '>'
-    | '<' '-'
-    | '\\'
-    | '\\' '\\'
-    | '/' ;
+bond: '-' { $$ = "-"; }
+    | '=' { $$ = "="; }
+    | '#' { $$ = "#"; }
+    | ':' { $$ = ":"; }
+    | '$' { $$ = "$"; }
+    | '~' { $$ = "~"; }
+    | '-' '>' { $$ = "->"; }
+    | '<' '-' { $$ = "<-"; }
+    | '\\' { $$ = "\\"; }
+    | '\\' '\\' { $$ = "\\\\"; }
+    | '/' { $$ = "/"; }
     ;
 
 /* --------------------------------------------------------------- */
@@ -146,11 +148,10 @@ simple_atom: ATOM_SYMBOL { ast_builder.add_atom($1); }
            | ORGANIC_ATOM { ast_builder.add_atom($1); }
            ;
 
-ring_number:  NUMBER { ast_builder.add_ring_atom($1, ast_builder.get_num_atoms()); }
-           | '%' NUMBER { ast_builder.add_ring_atom($2, ast_builder.get_num_atoms(), true); }
-           | '%' '(' NUMBER ')' { ast_builder.add_ring_atom($3, ast_builder.get_num_atoms(), true); }
+ring_number:  NUMBER { $$ = { $1, false }; }
+           | '%' NUMBER { $$ = { $2, true }; }
+           | '%' '(' NUMBER ')' { $$ = { $3, true }; }
            ;
-
 %%
 
 void smiles_parser::SmilesTokenParser::error(const location& loc, const std::string& msg) {

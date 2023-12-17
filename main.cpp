@@ -134,7 +134,8 @@ int main() {
 "Cl.Cl",
 "[Na+].[O-]c1ccccc1",
 "c1cc([O-].[Na+])ccc1",
-"[HH]"
+"[HH]",
+    "c1cc=1"
     }) {
         smiles_parser::parse(smiles);
     }
