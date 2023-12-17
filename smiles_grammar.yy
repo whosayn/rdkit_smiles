@@ -13,9 +13,21 @@
 
 
 %code requires {
+#include <cstddef>
+
 namespace smiles_parser {
+
 class SmilesTokenScanner;
 class SmilesASTBuilder;
+
+namespace {
+struct mol_info {
+    size_t head;
+    size_t tail;
+    size_t size;
+};
+}
+
 }
 }
 
@@ -33,10 +45,12 @@ class SmilesASTBuilder;
 #undef yylex
 #define yylex token_scanner.lex
 
-[[nodiscard]] static size_t stoi(std::string_view s) {
+namespace {
+[[nodiscard]] size_t stoi(std::string_view s) {
     size_t result;
     std::from_chars(s.data(), s.data() + s.size(), result);
     return result;
+}
 }
 
 }
@@ -45,7 +59,7 @@ class SmilesASTBuilder;
 
 %type <std::string_view> ring_number;
 %type <int> minus_signs plus_signs atom_charge explicit_h;
-//%type <std::pair<size_t, size_t>> mol;
+%type <mol_info> mol;
 
 
 %start mol
@@ -53,14 +67,14 @@ class SmilesASTBuilder;
 %%
 /* --------------------------------------------------------------- */
 // FIX: mol MINUS DIGIT
-mol: atom
-   | mol atom
-   | mol '.' atom
-   | mol bond atom
-   | mol ring_number
-   | mol bond ring_number
-   | mol '(' mol ')'
-   | mol '(' bond mol ')'
+mol: atom {  auto i = ast_builder.get_num_atoms(); $$ = { i, i, 1}; }
+   | mol atom  { $$ = $1;  $$.tail = $$.head + $$.size; ast_builder.add_bond($1.tail, $$.tail); ++$$.size; }
+   | mol '.' atom  { $$ = $1;  $$.tail = $$.head + $$.size; ast_builder.add_bond($1.tail, $$.tail); ++$$.size; }
+   | mol bond atom  { $$ = $1; ast_builder.add_bond($$.tail, ++$$.tail); ++$$.size; }
+   | mol ring_number  { $$ = $1; }
+   | mol bond ring_number { $$ = $1; }
+   | mol '(' mol ')'  { $$ = $1; ast_builder.add_bond($1.tail, $3.head); $$.size += $3.size; }
+   | mol '(' bond mol ')'  { $$ = $1; ast_builder.add_bond($1.tail, $4.head); $$.size += $4.size; }
    ;
 
 /* --------------------------------------------------------------- */

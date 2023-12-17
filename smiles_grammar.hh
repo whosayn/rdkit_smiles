@@ -47,12 +47,24 @@
 // "%code requires" blocks.
 #line 15 "smiles_grammar.yy"
 
+#include <cstddef>
+
 namespace smiles_parser {
+
 class SmilesTokenScanner;
 class SmilesASTBuilder;
+
+namespace {
+struct mol_info {
+    size_t head;
+    size_t tail;
+    size_t size;
+};
 }
 
-#line 56 "smiles_grammar.hh"
+}
+
+#line 68 "smiles_grammar.hh"
 
 
 # include <cstdlib> // std::abort
@@ -188,7 +200,7 @@ class SmilesASTBuilder;
 
 #line 5 "smiles_grammar.yy"
 namespace smiles_parser {
-#line 192 "smiles_grammar.hh"
+#line 204 "smiles_grammar.hh"
 
 
 
@@ -390,6 +402,9 @@ namespace smiles_parser {
       // explicit_h
       char dummy1[sizeof (int)];
 
+      // mol
+      char dummy2[sizeof (mol_info)];
+
       // SIMPLE_ATOM
       // NESTED_ATOM
       // H_TOKEN
@@ -398,7 +413,7 @@ namespace smiles_parser {
       // CHIRAL_TAG
       // NUMBER
       // ring_number
-      char dummy2[sizeof (std::string_view)];
+      char dummy3[sizeof (std::string_view)];
     };
 
     /// The size of the largest semantic type.
@@ -565,6 +580,10 @@ namespace smiles_parser {
         value.move< int > (std::move (that.value));
         break;
 
+      case symbol_kind::S_mol: // mol
+        value.move< mol_info > (std::move (that.value));
+        break;
+
       case symbol_kind::S_SIMPLE_ATOM: // SIMPLE_ATOM
       case symbol_kind::S_NESTED_ATOM: // NESTED_ATOM
       case symbol_kind::S_H_TOKEN: // H_TOKEN
@@ -614,6 +633,20 @@ namespace smiles_parser {
 #endif
 
 #if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, mol_info&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const mol_info& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
       basic_symbol (typename Base::kind_type t, std::string_view&& v, location_type&& l)
         : Base (t)
         , value (std::move (v))
@@ -656,6 +689,10 @@ switch (yykind)
       case symbol_kind::S_minus_signs: // minus_signs
       case symbol_kind::S_explicit_h: // explicit_h
         value.template destroy< int > ();
+        break;
+
+      case symbol_kind::S_mol: // mol
+        value.template destroy< mol_info > ();
         break;
 
       case symbol_kind::S_SIMPLE_ATOM: // SIMPLE_ATOM
@@ -1296,7 +1333,7 @@ switch (yykind)
 
 #line 5 "smiles_grammar.yy"
 } // smiles_parser
-#line 1300 "smiles_grammar.hh"
+#line 1337 "smiles_grammar.hh"
 
 
 
