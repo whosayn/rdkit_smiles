@@ -25,6 +25,7 @@ class SmilesASTBuilder;
 
 %code {
 #include <charconv>
+#include <utility>
 
 #include "smiles_scanner.h"
 #include "smiles_parser.h"
@@ -44,6 +45,7 @@ class SmilesASTBuilder;
 
 %type <std::string_view> ring_number;
 %type <int> minus_signs plus_signs atom_charge explicit_h;
+//%type <std::pair<size_t, size_t>> mol;
 
 
 %start mol
@@ -133,7 +135,7 @@ simple_atom: SIMPLE_ATOM { ast_builder.add_atom($1); }
 
 ring_number:  NUMBER { $$ = $1; }
            | '%' NUMBER { $$ = $2; }
-           | '%' '(' NUMBER ')' '%' { $$ = $3; }
+           | '%' '(' NUMBER ')' { $$ = $3; }
            ;
 
 %%

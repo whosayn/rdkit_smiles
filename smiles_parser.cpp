@@ -45,7 +45,14 @@ void SmilesASTBuilder::add_atom_map_number(size_t atom_map_number) {
     d_mol.atoms.back().map_number = atom_map_number;
 }
 
-void SmilesASTBuilder::add_bond(){}
+size_t SmilesASTBuilder::get_num_atoms() {
+    return d_mol.atoms.size();
+}
+
+void SmilesASTBuilder::add_bond(size_t atom1, size_t atom2, std::string_view bond_token) {
+    d_mol.bonds.push_back({atom1, atom2, bond_token});
+}
+
 void SmilesASTBuilder::add_ring(){}
 
 MolInfo SmilesASTBuilder::finalize() {
@@ -69,6 +76,10 @@ void parse(std::string_view val) {
         count += atom.explicit_h_count;
     }
 
-    std::cout << val << ": " << count << std::endl;
+    for (auto& bond : mol.bonds) {
+        std::cout << bond.begin_atom << "->" << bond.end_atom << std::endl;
+    }
+
+    std::cout << val << ": " << count << ": " << mol.bonds.size() << std::endl;
 }
 }

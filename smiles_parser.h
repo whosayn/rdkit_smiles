@@ -54,8 +54,9 @@ class SmilesASTBuilder {
         void add_atom_charge(int atom_charge);
         void add_atom_map_number(size_t atom_map_number);
 
+        size_t get_num_atoms();
 
-        void add_bond();
+        void add_bond(size_t atom1, size_t atom2, std::string_view bond_token = {"-"});
         void add_ring();
         MolInfo finalize();
    private:
