@@ -524,22 +524,21 @@ namespace smiles_parser {
         S_bond = 30,                             // bond
         S_atom = 31,                             // atom
         S_atom_map_number = 32,                  // atom_map_number
-        S_needs_sq_bracs = 33,                   // needs_sq_bracs
-        S_atom_with_charge = 34,                 // atom_with_charge
+        S_complex_atom = 33,                     // complex_atom
+        S_charged_atom = 34,                     // charged_atom
         S_atom_charge = 35,                      // atom_charge
         S_plus_signs = 36,                       // plus_signs
         S_minus_signs = 37,                      // minus_signs
-        S_atom_that_can_have_charge = 38,        // atom_that_can_have_charge
-        S_atom_with_hydrogens = 39,              // atom_with_hydrogens
+        S_uncharged_atom = 38,                   // uncharged_atom
+        S_atom_with_hs = 39,                     // atom_with_hs
         S_explicit_h = 40,                       // explicit_h
-        S_atom_that_can_have_hydrogens = 41,     // atom_that_can_have_hydrogens
+        S_singular_atom = 41,                    // singular_atom
         S_hydrogen_atom = 42,                    // hydrogen_atom
-        S_chiral_element = 43,                   // chiral_element
-        S_element = 44,                          // element
-        S_isotope = 45,                          // isotope
-        S_non_isotope = 46,                      // non_isotope
-        S_simple_atom = 47,                      // simple_atom
-        S_ring_number = 48                       // ring_number
+        S_chiral_atom = 43,                      // chiral_atom
+        S_achiral_atom = 44,                     // achiral_atom
+        S_non_hydrogen_isotope = 45,             // non_hydrogen_isotope
+        S_non_hydrogen_atom = 46,                // non_hydrogen_atom
+        S_ring_number = 47                       // ring_number
       };
     };
 
@@ -841,7 +840,7 @@ switch (yykind)
     };
 
     /// Build a parser object.
-    SmilesTokenParser (SmilesTokenScanner& token_scanner_yyarg, SmilesASTBuilder& ast_builder_yyarg);
+    SmilesTokenParser (SmilesTokenScanner& token_scanner_yyarg, SmilesASTBuilder& ast_yyarg);
     virtual ~SmilesTokenParser ();
 
 #if 201103L <= YY_CPLUSPLUS
@@ -1344,21 +1343,21 @@ switch (yykind)
     enum
     {
       yylast_ = 135,     ///< Last index in yytable_.
-      yynnts_ = 21,  ///< Number of nonterminal symbols.
+      yynnts_ = 20,  ///< Number of nonterminal symbols.
       yyfinal_ = 23 ///< Termination state number.
     };
 
 
     // User arguments.
     SmilesTokenScanner& token_scanner;
-    SmilesASTBuilder& ast_builder;
+    SmilesASTBuilder& ast;
 
   };
 
 
 #line 5 "smiles_grammar.yy"
 } // smiles_parser
-#line 1362 "smiles_grammar.hh"
+#line 1361 "smiles_grammar.hh"
 
 
 

@@ -32,7 +32,7 @@ struct mol_info {
 }
 
 %parse-param { SmilesTokenScanner& token_scanner }
-%parse-param { SmilesASTBuilder& ast_builder }
+%parse-param { SmilesASTBuilder& ast }
 %initial-action { @$.begin.column = 0; };
 
 %code {
@@ -66,19 +66,17 @@ namespace {
 %start mol
 
 %%
-/* --------------------------------------------------------------- */
 // FIX: mol MINUS DIGIT
-mol: atom {  auto i = ast_builder.get_num_atoms(); $$ = { i, i, 1}; }
-   | mol atom  { $$ = $1;  $$.tail = $$.head + $$.size; ast_builder.add_bond($1.tail, $$.tail); ++$$.size; }
+mol: atom {  auto i = ast.get_num_atoms(); $$ = { i, i, 1}; }
+   | mol atom  { $$ = $1;  $$.tail = $$.head + $$.size; ast.add_bond($1.tail, $$.tail); ++$$.size; }
    | mol '.' atom  { $$ = $1;  $$.tail = $$.head + $$.size; ++$$.size; }
-   | mol bond atom  { $$ = $1; ast_builder.add_bond($$.tail, ++$$.tail, $2); ++$$.size; }
-   | mol ring_number  { $$ = $1; ast_builder.add_ring_info($2.first, "-", $2.second); }
-   | mol bond ring_number { $$ = $1; ast_builder.add_ring_info($3.first, $2, $3.second); }
-   | mol '(' mol ')'  { $$ = $1; ast_builder.add_bond($1.tail, $3.head); $$.size += $3.size; }
-   | mol '(' bond mol ')'  { $$ = $1; ast_builder.add_bond($1.tail, $4.head, $3); $$.size += $4.size; }
+   | mol bond atom  { $$ = $1; ast.add_bond($$.tail, ++$$.tail, $2); ++$$.size; }
+   | mol ring_number  { $$ = $1; ast.add_ring_info($2.first, "-", $2.second); }
+   | mol bond ring_number { $$ = $1; ast.add_ring_info($3.first, $2, $3.second); }
+   | mol '(' mol ')'  { $$ = $1; ast.add_bond($1.tail, $3.head); $$.size += $3.size; }
+   | mol '(' bond mol ')'  { $$ = $1; ast.add_bond($1.tail, $4.head, $3); $$.size += $4.size; }
    ;
 
-/* --------------------------------------------------------------- */
 bond: '-' { $$ = "-"; }
     | '=' { $$ = "="; }
     | '#' { $$ = "#"; }
@@ -89,69 +87,54 @@ bond: '-' { $$ = "-"; }
     | '<' '-' { $$ = "<-"; }
     | '\\' { $$ = "\\"; }
     | '\\' '\\' { $$ = "\\\\"; }
-    | '/' { $$ = "/"; }
-    ;
+    | '/' { $$ = "/"; };
 
-/* --------------------------------------------------------------- */
-atom: simple_atom
-    | '[' needs_sq_bracs ':' atom_map_number ']'
-    | '[' needs_sq_bracs ']'
-    ;
+// ways to represent atom info
+atom: ATOM_SYMBOL { ast.add_atom($1); }
+    | ORGANIC_ATOM { ast.add_atom($1); }
+    | '[' complex_atom ':' atom_map_number ']'
+    | '[' complex_atom ']';
 
-atom_map_number: NUMBER { ast_builder.add_atom_map_number(stoi($1)); }
+atom_map_number: NUMBER { ast.add_atom_map_number(stoi($1)); };
 
-needs_sq_bracs: atom_that_can_have_charge | atom_with_charge;
+complex_atom: uncharged_atom | charged_atom;
 
-atom_with_charge: atom_that_can_have_charge atom_charge {
-                                              ast_builder.add_atom_charge($2); }
+charged_atom: uncharged_atom atom_charge { ast.add_atom_charge($2); };
 
-atom_charge: plus_signs
-           | '+' NUMBER { $$ = stoi($2); }
-           | minus_signs
-           | '-' NUMBER { $$ = -1 * stoi($2); }
-           ;
+atom_charge: plus_signs | '+' NUMBER { $$ = stoi($2); }
+           | minus_signs | '-' NUMBER { $$ = -1 * stoi($2); };
 plus_signs: '+' { $$ = 1; } | plus_signs '+' { $$ = $1 + 1; };
 minus_signs: '-' { $$ = -1; } | minus_signs '-' { $$ = $1 - 1; };
 
-atom_that_can_have_charge: atom_that_can_have_hydrogens | atom_with_hydrogens;
+uncharged_atom: singular_atom | atom_with_hs;
 
-atom_with_hydrogens: atom_that_can_have_hydrogens explicit_h { ast_builder.add_explicit_h($2); };
+atom_with_hs: singular_atom explicit_h { ast.add_explicit_h($2); };
+explicit_h: H_TOKEN { $$ = 1; } | H_TOKEN NUMBER { $$ = stoi($2); };
 
-explicit_h: H_TOKEN { $$ = 1; } | H_TOKEN NUMBER { $$ = stoi($2); }
+singular_atom: hydrogen_atom | achiral_atom | chiral_atom;
 
-atom_that_can_have_hydrogens: hydrogen_atom
-           | element
-           | chiral_element;
+hydrogen_atom: H_TOKEN { ast.add_atom($1); }
+             | NUMBER H_TOKEN { ast.add_atom($2);
+                                ast.add_isotope_num(stoi($1)); }
 
+chiral_atom: achiral_atom '@' { ast.add_chirality_tag("@"); }
+           | achiral_atom '@' '@' { ast.add_chirality_tag("@@"); }
+           | achiral_atom CHIRAL_TAG { ast.add_chirality_class($2); }
+           | achiral_atom CHIRAL_TAG NUMBER { ast.add_chirality_class($2, $3); }
 
-hydrogen_atom: H_TOKEN { ast_builder.add_atom($1); }
-             | NUMBER H_TOKEN { ast_builder.add_atom($2);
-                                ast_builder.add_isotope_num(stoi($1)); }
+achiral_atom: non_hydrogen_atom | non_hydrogen_isotope;
 
-chiral_element:	element '@' { ast_builder.add_chirality_tag("@"); }
-              | element '@' '@' { ast_builder.add_chirality_tag("@@"); }
-              | element CHIRAL_TAG { ast_builder.add_chirality_class($2); }
-              | element CHIRAL_TAG NUMBER { ast_builder.add_chirality_class($2, $3); }
-              ;
+non_hydrogen_isotope: NUMBER non_hydrogen_atom { ast.add_isotope_num(stoi($1)); }
 
-element: non_isotope | isotope;
+non_hydrogen_atom: ATOM_SYMBOL { ast.add_atom($1); }
+                 | ORGANIC_ATOM { ast.add_atom($1); }
+                 | NESTED_ATOM { ast.add_atom($1); }
+                 | '#' NUMBER { ast.add_atom($2); }
+                 | BIOVIA_ATOM { ast.add_atom($1); }
 
-isotope: NUMBER non_isotope { ast_builder.add_isotope_num(stoi($1)); }
-
-non_isotope: simple_atom
-       |	NESTED_ATOM { ast_builder.add_atom($1); }
-       |   '#' NUMBER { ast_builder.add_atom($2); }
-       |    BIOVIA_ATOM { ast_builder.add_atom($1); }
-       ;
-
-simple_atom: ATOM_SYMBOL { ast_builder.add_atom($1); }
-           | ORGANIC_ATOM { ast_builder.add_atom($1); }
-           ;
-
-ring_number:  NUMBER { $$ = { $1, false }; }
+ring_number: NUMBER { $$ = { $1, false }; }
            | '%' NUMBER { $$ = { $2, true }; }
-           | '%' '(' NUMBER ')' { $$ = { $3, true }; }
-           ;
+           | '%' '(' NUMBER ')' { $$ = { $3, true }; };
 %%
 
 void smiles_parser::SmilesTokenParser::error(const location& loc, const std::string& msg) {
