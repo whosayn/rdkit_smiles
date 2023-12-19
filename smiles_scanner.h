@@ -18,12 +18,11 @@ namespace smiles_parser {
 
             int lex(smiles_parser::SmilesTokenParser::semantic_type* const lval,
                     smiles_parser::SmilesTokenParser::location_type* location);
-
             std::string_view d_input;
 
     };
 }
 
 // don't know why these aren't generated
-inline int smilesFlexLexer::yylex() { return 0; }
+inline int smilesFlexLexer::yylex() { return 1; }
 inline int smilesFlexLexer::yywrap() { return 1; }

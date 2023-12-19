@@ -7,7 +7,7 @@
 
 #define YY_USER_ACTION \
     lval->build<std::string_view>(d_input.substr(location->begin.column, yyleng)); \
-    location->step(); location->columns(yyleng);
+    location->begin += yyleng; location->columns(yyleng);
 
     using token = smiles_parser::SmilesTokenParser::token_kind_type;
 %}
@@ -29,7 +29,7 @@
 <*>[0-9]+ { return token::NUMBER; }
 
 <*>H { return token::H_TOKEN; }
-<*>B|C|N|O|P|S|F|Cl|Br|I { return token::ORGANIC_ATOM; }
+<*>Cl|Br|B|C|N|O|P|S|F|I { return token::ORGANIC_ATOM; }
 
 
 <*>[a-z]  { return token::ATOM_SYMBOL; }

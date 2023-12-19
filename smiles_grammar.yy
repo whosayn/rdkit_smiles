@@ -71,7 +71,7 @@ mol: atom {  auto i = ast.get_num_atoms(); $$ = { i, i, 1}; }
    | mol atom  { $$ = $1;  $$.tail = $$.head + $$.size; ast.add_bond($1.tail, $$.tail); ++$$.size; }
    | mol '.' atom  { $$ = $1;  $$.tail = $$.head + $$.size; ++$$.size; }
    | mol bond atom  { $$ = $1; ast.add_bond($$.tail, ++$$.tail, $2); ++$$.size; }
-   | mol ring_number  { $$ = $1; ast.add_ring_info($2.first, "-", $2.second); }
+   | mol ring_number  { $$ = $1; ast.add_ring_info($2.first, "", $2.second); }
    | mol bond ring_number { $$ = $1; ast.add_ring_info($3.first, $2, $3.second); }
    | mol '(' mol ')'  { $$ = $1; ast.add_bond($1.tail, $3.head); $$.size += $3.size; }
    | mol '(' bond mol ')'  { $$ = $1; ast.add_bond($1.tail, $4.head, $3); $$.size += $4.size; }
@@ -138,7 +138,9 @@ ring_number: NUMBER { $$ = { $1, false }; }
 %%
 
 void smiles_parser::SmilesTokenParser::error(const location& loc, const std::string& msg) {
+    auto bad_position = loc.begin.column;
     std::cerr << "'"<< token_scanner.d_input << "' failed because of " << msg <<
-" at position: " << loc.begin.column << std::endl;
-
+" at position: " << bad_position << std::endl;
+    std::cerr << token_scanner.d_input << std::endl;
+    std::cerr << std::string(bad_position, '-') << '^' << std::endl;
 }

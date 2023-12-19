@@ -1030,7 +1030,7 @@ static const yy_state_type yy_NUL_trans[37] =
 
 #define YY_USER_ACTION \
     lval->build<std::string_view>(d_input.substr(location->begin.column, yyleng)); \
-    location->step(); location->columns(yyleng);
+    location->begin += yyleng; location->columns(yyleng);
 
     using token = smiles_parser::SmilesTokenParser::token_kind_type;
 #line 1036 "smiles_lexer.yy.cc"

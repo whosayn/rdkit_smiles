@@ -135,8 +135,22 @@ int main() {
 "[Na+].[O-]c1ccccc1",
 "c1cc([O-].[Na+])ccc1",
 "[HH]",
-    "c1cc=1"
+    "c1cc=1",
+    "c=1cc=1",
+    "c-1cc=1",
+    "c-1cc=2",
+    "c-0cc=20",
+"['Hf'@OH1](['Cl'])(Cl)(Cl)(Cl)([O]1CCCC1)[O]1CCCC1",
+    "ClBrI",
+    "C(Cl)BrI",
+    "c=%(1000000)ccc=%(1000000)",
+    "c=%(000000)ccc=%(000000)",
+    "C([H]",
+    "[#1H]",
+    "C-2-1CCC2C1",
+    "C=2-1CCC2C=1"
     }) {
+        std::cout << smiles << std::endl;
         smiles_parser::parse(smiles);
     }
     return 0;

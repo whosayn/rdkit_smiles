@@ -857,7 +857,7 @@ namespace smiles_parser {
 
   case 6: // mol: mol ring_number
 #line 74 "smiles_grammar.yy"
-                      { yylhs.value.as < mol_info > () = yystack_[1].value.as < mol_info > (); ast.add_ring_info(yystack_[0].value.as < std::pair<std::string_view, bool> > ().first, "-", yystack_[0].value.as < std::pair<std::string_view, bool> > ().second); }
+                      { yylhs.value.as < mol_info > () = yystack_[1].value.as < mol_info > (); ast.add_ring_info(yystack_[0].value.as < std::pair<std::string_view, bool> > ().first, "", yystack_[0].value.as < std::pair<std::string_view, bool> > ().second); }
 #line 862 "smiles_grammar.cc"
     break;
 
@@ -1555,7 +1555,9 @@ namespace smiles_parser {
 
 
 void smiles_parser::SmilesTokenParser::error(const location& loc, const std::string& msg) {
+    auto bad_position = loc.begin.column;
     std::cerr << "'"<< token_scanner.d_input << "' failed because of " << msg <<
-" at position: " << loc.begin.column << std::endl;
-
+" at position: " << bad_position << std::endl;
+    std::cerr << token_scanner.d_input << std::endl;
+    std::cerr << std::string(bad_position, '-') << '^' << std::endl;
 }
