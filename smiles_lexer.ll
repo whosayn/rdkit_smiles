@@ -29,7 +29,7 @@
 <*>[0-9]+ { return token::NUMBER; }
 
 <*>H { return token::H_TOKEN; }
-<*>Cl|Br|B|C|N|O|P|S|F|I { return token::ORGANIC_ATOM; }
+<*>Cl|Br|B|C|N|O|P|S|F|I|\* { return token::ORGANIC_ATOM; }
 
 
 <*>[a-z]  { return token::ATOM_SYMBOL; }
@@ -43,6 +43,5 @@
 <IN_ATOM_STATE>\]	{ BEGIN INITIAL; return yytext[0]; }
 
 <*>.		{  return yytext[0]; }
-<<EOF>>		{ return token::YYEOF; }
 
 %%

@@ -851,7 +851,7 @@ namespace smiles_parser {
 
   case 5: // mol: mol bond atom
 #line 73 "smiles_grammar.yy"
-                    { yylhs.value.as < mol_info > () = yystack_[2].value.as < mol_info > (); ast.add_bond(yylhs.value.as < mol_info > ().tail, ++yylhs.value.as < mol_info > ().tail, yystack_[1].value.as < std::string_view > ()); ++yylhs.value.as < mol_info > ().size; }
+                    { yylhs.value.as < mol_info > () = yystack_[2].value.as < mol_info > (); yylhs.value.as < mol_info > ().tail = yylhs.value.as < mol_info > ().head + yylhs.value.as < mol_info > ().size; ast.add_bond(yystack_[2].value.as < mol_info > ().tail, yylhs.value.as < mol_info > ().tail, yystack_[1].value.as < std::string_view > ()); ++yylhs.value.as < mol_info > ().size; }
 #line 856 "smiles_grammar.cc"
     break;
 

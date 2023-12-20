@@ -70,7 +70,7 @@ namespace {
 mol: atom {  auto i = ast.get_num_atoms(); $$ = { i, i, 1}; }
    | mol atom  { $$ = $1;  $$.tail = $$.head + $$.size; ast.add_bond($1.tail, $$.tail); ++$$.size; }
    | mol '.' atom  { $$ = $1;  $$.tail = $$.head + $$.size; ++$$.size; }
-   | mol bond atom  { $$ = $1; ast.add_bond($$.tail, ++$$.tail, $2); ++$$.size; }
+   | mol bond atom  { $$ = $1; $$.tail = $$.head + $$.size; ast.add_bond($1.tail, $$.tail, $2); ++$$.size; }
    | mol ring_number  { $$ = $1; ast.add_ring_info($2.first, "", $2.second); }
    | mol bond ring_number { $$ = $1; ast.add_ring_info($3.first, $2, $3.second); }
    | mol '(' mol ')'  { $$ = $1; ast.add_bond($1.tail, $3.head); $$.size += $3.size; }
