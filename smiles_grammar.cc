@@ -1555,7 +1555,7 @@ namespace smiles_parser {
 
 
 void smiles_parser::SmilesTokenParser::error(const location& loc, const std::string& msg) {
-    auto bad_position = loc.begin.column;
+    auto bad_position = loc.begin.column -1;
     std::cerr << "'"<< token_scanner.d_input << "' failed because of " << msg <<
 " at position: " << bad_position << std::endl;
     std::cerr << token_scanner.d_input << std::endl;
