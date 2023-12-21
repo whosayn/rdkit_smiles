@@ -86,8 +86,8 @@ bond_token: '-' { $$ = "-"; }
 // ways to represent atom info
 atom: ATOM_SYMBOL { ast.add_atom($1); }
     | ORGANIC_ATOM { ast.add_atom($1); }
-    | '[' complex_atom ':' atom_map_number ']'
-    | '[' complex_atom ']';
+    | '[' complex_atom ':' atom_map_number ']' { ast.set_no_implicit_hs(); }
+    | '[' complex_atom ']' { ast.set_no_implicit_hs(); };
 
 atom_map_number: NUMBER { ast.add_atom_map_number(stoi($1)); };
 
