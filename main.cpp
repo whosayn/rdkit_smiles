@@ -148,7 +148,12 @@ int main() {
     "C([H]",
     "[#1H]",
     "C-2-1CCC2C1",
-    "C=2-1CCC2C=1"
+    "C=2-1CCC2C=1",
+    "C(~C~C)",
+    "C-2-1CCC2C1",
+    "[si][si][si]",
+    "[sicc][si][si]",
+    "C1=CC=CN(=O)=C1"
     }) {
         std::cout << smiles << std::endl;
         smiles_parser::parse(smiles);
