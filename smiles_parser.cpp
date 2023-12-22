@@ -10,6 +10,11 @@
 
 namespace smiles_parser {
 
+template<class... Ts>
+struct overloaded : Ts... { using Ts::operator()...; };
+template<class... Ts>
+overloaded(Ts...) -> overloaded<Ts...>;
+
 void SmilesASTBuilder::add_atom(std::string_view atom_name) {
   d_events.push_back(AtomInfo{atom_name});
 }
@@ -89,14 +94,8 @@ void SmilesASTBuilder::add_sep_info() {
     d_events.push_back(SepInfo{});
 }
 
-template<class... Ts>
-struct overloaded : Ts... { using Ts::operator()...; };
-template<class... Ts>
-overloaded(Ts...) -> overloaded<Ts...>;
-
-  std::vector<std::variant<SepInfo, BranchInfo, AtomInfo, BondInfo, RingInfo>> d_events;
-MolInfo SmilesASTBuilder::finalize() {
-    std::cout << "events: ";
+SmilesASTBuilder::mol_info_t SmilesASTBuilder::finalize() {
+  std::cout << "events: ";
   for (auto& v : d_events) {
     std::visit(overloaded{
             [](SepInfo&) { std::cout << "."; },
@@ -106,7 +105,7 @@ MolInfo SmilesASTBuilder::finalize() {
   }
   std::cout << std::endl;
   //auto mol = std::exchange(d_mol, {});
-  auto mol = MolInfo{};
+  auto mol = d_events;
   std::cout << "num events: " << d_events.size() << std::endl;
   return mol;
 }
@@ -160,44 +159,56 @@ static size_t get_atomic_number(std::string_view& atom_symbol) {
   return result;
 }
 
-static void validate_atoms(std::vector<AtomInfo>& atoms) {
-  for (auto& atom : atoms) {
-    if (std::isdigit(atom.name[0])) {
-      atom.atomic_number = stoi(atom.name);
-    } else {
-      atom.atomic_number = get_atomic_number(atom.name);
-      if (atom.atomic_number == std::numeric_limits<size_t>::max()) {
-        std::cout << "bad atom: " << atom.name << std::endl;
+static void validate_atoms(SmilesASTBuilder::mol_info_t& mol_info) {
+  for (auto& info : mol_info) {
+    std::visit(overloaded{
+            [](auto& a) {},
+            [](AtomInfo& atom) {
+                if (std::isdigit(atom.name[0])) {
+                  atom.atomic_number = stoi(atom.name);
+                } else {
+                  atom.atomic_number = get_atomic_number(atom.name);
+                  if (atom.atomic_number == std::numeric_limits<size_t>::max()) {
+                    std::cout << "bad atom: " << atom.name << std::endl;
+                  }
+                }
       }
-    }
+        }, info);
   }
 }
 
-static void validate_rings(const std::vector<RingInfo>& rings) {
-    /*
+static void validate_rings(SmilesASTBuilder::mol_info_t& mol_info) {
   std::unordered_map<std::string_view, const RingInfo&> seen_rings;
-  seen_rings.reserve(rings.size());
-  for (auto& ring_info : rings) {
-    if (stoi(ring_info.ring_number) == 0) {
-      std::cerr << "'" << ring_info.ring_number << "'"
-                << " is not a valid ring number" << std::endl;
-      continue;
-    }
+  for (auto& info : mol_info) {
+    std::visit(overloaded{
+            [](auto& a) {},
+            [&](RingInfo& ring_info) {
+                /*
+                if (stoi(ring_info.token) == 0) {
+                  std::cerr << "'" << ring_info.token << "'"
+                            << " is not a valid ring number" << std::endl;
+                  continue;
+                }
+                */
 
-    if (seen_rings.find(ring_info.ring_number) == seen_rings.end()) {
-      seen_rings.insert({ring_info.ring_number, ring_info});
-      continue;
-    }
+                if (seen_rings.find(ring_info.token) == seen_rings.end()) {
+                  seen_rings.insert({ring_info.token, ring_info});
+                  return;
+                }
 
-    auto& ring_start = seen_rings.at(ring_info.ring_number);
-    if (ring_start.bond_token.empty() || ring_info.bond_token.empty()) {
-      // pass
-    } else if (ring_start.bond_token != ring_info.bond_token) {
-      std::cerr << "ring '" << ring_info.ring_number
-                << "' has different closing bond types" << std::endl;
-    }
+                /*
+                auto& ring_start = seen_rings.at(ring_info.ring_number);
+                if (ring_start.bond_token.empty() || ring_info.bond_token.empty()) {
+                  // pass
+                } else if (ring_start.bond_token != ring_info.bond_token) {
+                  std::cerr << "ring '" << ring_info.ring_number
+                            << "' has different closing bond types" << std::endl;
+                }
+                */
 
-    seen_rings.erase(ring_info.ring_number);
+                seen_rings.erase(ring_info.token);
+              }
+    }, info);
   }
 
   if (seen_rings.size() != 0) {
@@ -206,10 +217,9 @@ static void validate_rings(const std::vector<RingInfo>& rings) {
       std::cerr << ring_number << std::endl;
     }
   }
-  */
 }
 
-std::optional<MolInfo> parse(std::string_view val) {
+std::optional<SmilesASTBuilder::mol_info_t> parse(std::string_view val) {
   std::istringstream iss(val.data());
   SmilesTokenScanner sc(&iss, val);
   SmilesASTBuilder ast_builder;
@@ -219,9 +229,9 @@ std::optional<MolInfo> parse(std::string_view val) {
     return std::nullopt;
   }
 
-  auto mol = ast_builder.finalize();
-  validate_atoms(mol.atoms);
-  //validate_rings(mol.rings);
-  return std::make_optional<MolInfo>(std::move(mol));
+  auto mol_info = ast_builder.finalize();
+  validate_atoms(mol_info);
+  validate_rings(mol_info);
+  return std::make_optional<SmilesASTBuilder::mol_info_t>(std::move(mol_info));
 }
 }  // namespace smiles_parser

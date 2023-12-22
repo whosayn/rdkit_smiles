@@ -39,20 +39,10 @@ struct BranchInfo {
 struct SepInfo {
 };
 
-struct MolInfo {
-  std::vector<AtomInfo> atoms;
-  std::vector<BondInfo> bonds;
-  std::vector<RingInfo> rings;
-
-  MolInfo() = default;
-  MolInfo(const MolInfo&) = delete;
-  MolInfo& operator=(const MolInfo&) = delete;
-  MolInfo(MolInfo&&) = default;
-  MolInfo& operator=(MolInfo&&) = default;
-};
-
 class SmilesASTBuilder {
  public:
+  using mol_info_t = std::vector<std::variant<SepInfo, BranchInfo, AtomInfo, BondInfo, RingInfo>>;
+
   void add_atom(std::string_view atom_name);
   void add_explicit_h(size_t count = 1);
   void add_isotope_num(size_t isotope_num);
@@ -69,11 +59,11 @@ class SmilesASTBuilder {
   void add_bond(std::string_view bond_token);
 
   void add_ring_info(std::string_view ring_number, bool use_as_is = false);
-  MolInfo finalize();
+  mol_info_t finalize();
 
  private:
-  std::vector<std::variant<SepInfo, BranchInfo, AtomInfo, BondInfo, RingInfo>> d_events;
+  mol_info_t d_events;
 };
 
-std::optional<MolInfo> parse(std::string_view val);
+std::optional<SmilesASTBuilder::mol_info_t> parse(std::string_view val);
 }  // namespace smiles_parser
