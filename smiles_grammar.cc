@@ -42,7 +42,7 @@
 
 
 // Unqualified %code blocks.
-#line 38 "smiles_grammar.yy"
+#line 29 "smiles_grammar.yy"
 
 #include <charconv>
 #include <utility>
@@ -195,14 +195,6 @@ namespace smiles_parser {
         value.copy< int > (YY_MOVE (that.value));
         break;
 
-      case symbol_kind::S_mol: // mol
-        value.copy< mol_info > (YY_MOVE (that.value));
-        break;
-
-      case symbol_kind::S_ring_number: // ring_number
-        value.copy< std::pair<std::string_view, bool> > (YY_MOVE (that.value));
-        break;
-
       case symbol_kind::S_ATOM_SYMBOL: // ATOM_SYMBOL
       case symbol_kind::S_NESTED_ATOM: // NESTED_ATOM
       case symbol_kind::S_H_TOKEN: // H_TOKEN
@@ -210,7 +202,7 @@ namespace smiles_parser {
       case symbol_kind::S_BIOVIA_ATOM: // BIOVIA_ATOM
       case symbol_kind::S_CHIRAL_TAG: // CHIRAL_TAG
       case symbol_kind::S_NUMBER: // NUMBER
-      case symbol_kind::S_bond: // bond
+      case symbol_kind::S_bond_token: // bond_token
         value.copy< std::string_view > (YY_MOVE (that.value));
         break;
 
@@ -252,14 +244,6 @@ namespace smiles_parser {
         value.move< int > (YY_MOVE (s.value));
         break;
 
-      case symbol_kind::S_mol: // mol
-        value.move< mol_info > (YY_MOVE (s.value));
-        break;
-
-      case symbol_kind::S_ring_number: // ring_number
-        value.move< std::pair<std::string_view, bool> > (YY_MOVE (s.value));
-        break;
-
       case symbol_kind::S_ATOM_SYMBOL: // ATOM_SYMBOL
       case symbol_kind::S_NESTED_ATOM: // NESTED_ATOM
       case symbol_kind::S_H_TOKEN: // H_TOKEN
@@ -267,7 +251,7 @@ namespace smiles_parser {
       case symbol_kind::S_BIOVIA_ATOM: // BIOVIA_ATOM
       case symbol_kind::S_CHIRAL_TAG: // CHIRAL_TAG
       case symbol_kind::S_NUMBER: // NUMBER
-      case symbol_kind::S_bond: // bond
+      case symbol_kind::S_bond_token: // bond_token
         value.move< std::string_view > (YY_MOVE (s.value));
         break;
 
@@ -379,14 +363,6 @@ namespace smiles_parser {
         value.YY_MOVE_OR_COPY< int > (YY_MOVE (that.value));
         break;
 
-      case symbol_kind::S_mol: // mol
-        value.YY_MOVE_OR_COPY< mol_info > (YY_MOVE (that.value));
-        break;
-
-      case symbol_kind::S_ring_number: // ring_number
-        value.YY_MOVE_OR_COPY< std::pair<std::string_view, bool> > (YY_MOVE (that.value));
-        break;
-
       case symbol_kind::S_ATOM_SYMBOL: // ATOM_SYMBOL
       case symbol_kind::S_NESTED_ATOM: // NESTED_ATOM
       case symbol_kind::S_H_TOKEN: // H_TOKEN
@@ -394,7 +370,7 @@ namespace smiles_parser {
       case symbol_kind::S_BIOVIA_ATOM: // BIOVIA_ATOM
       case symbol_kind::S_CHIRAL_TAG: // CHIRAL_TAG
       case symbol_kind::S_NUMBER: // NUMBER
-      case symbol_kind::S_bond: // bond
+      case symbol_kind::S_bond_token: // bond_token
         value.YY_MOVE_OR_COPY< std::string_view > (YY_MOVE (that.value));
         break;
 
@@ -420,14 +396,6 @@ namespace smiles_parser {
         value.move< int > (YY_MOVE (that.value));
         break;
 
-      case symbol_kind::S_mol: // mol
-        value.move< mol_info > (YY_MOVE (that.value));
-        break;
-
-      case symbol_kind::S_ring_number: // ring_number
-        value.move< std::pair<std::string_view, bool> > (YY_MOVE (that.value));
-        break;
-
       case symbol_kind::S_ATOM_SYMBOL: // ATOM_SYMBOL
       case symbol_kind::S_NESTED_ATOM: // NESTED_ATOM
       case symbol_kind::S_H_TOKEN: // H_TOKEN
@@ -435,7 +403,7 @@ namespace smiles_parser {
       case symbol_kind::S_BIOVIA_ATOM: // BIOVIA_ATOM
       case symbol_kind::S_CHIRAL_TAG: // CHIRAL_TAG
       case symbol_kind::S_NUMBER: // NUMBER
-      case symbol_kind::S_bond: // bond
+      case symbol_kind::S_bond_token: // bond_token
         value.move< std::string_view > (YY_MOVE (that.value));
         break;
 
@@ -461,14 +429,6 @@ namespace smiles_parser {
         value.copy< int > (that.value);
         break;
 
-      case symbol_kind::S_mol: // mol
-        value.copy< mol_info > (that.value);
-        break;
-
-      case symbol_kind::S_ring_number: // ring_number
-        value.copy< std::pair<std::string_view, bool> > (that.value);
-        break;
-
       case symbol_kind::S_ATOM_SYMBOL: // ATOM_SYMBOL
       case symbol_kind::S_NESTED_ATOM: // NESTED_ATOM
       case symbol_kind::S_H_TOKEN: // H_TOKEN
@@ -476,7 +436,7 @@ namespace smiles_parser {
       case symbol_kind::S_BIOVIA_ATOM: // BIOVIA_ATOM
       case symbol_kind::S_CHIRAL_TAG: // CHIRAL_TAG
       case symbol_kind::S_NUMBER: // NUMBER
-      case symbol_kind::S_bond: // bond
+      case symbol_kind::S_bond_token: // bond_token
         value.copy< std::string_view > (that.value);
         break;
 
@@ -501,14 +461,6 @@ namespace smiles_parser {
         value.move< int > (that.value);
         break;
 
-      case symbol_kind::S_mol: // mol
-        value.move< mol_info > (that.value);
-        break;
-
-      case symbol_kind::S_ring_number: // ring_number
-        value.move< std::pair<std::string_view, bool> > (that.value);
-        break;
-
       case symbol_kind::S_ATOM_SYMBOL: // ATOM_SYMBOL
       case symbol_kind::S_NESTED_ATOM: // NESTED_ATOM
       case symbol_kind::S_H_TOKEN: // H_TOKEN
@@ -516,7 +468,7 @@ namespace smiles_parser {
       case symbol_kind::S_BIOVIA_ATOM: // BIOVIA_ATOM
       case symbol_kind::S_CHIRAL_TAG: // CHIRAL_TAG
       case symbol_kind::S_NUMBER: // NUMBER
-      case symbol_kind::S_bond: // bond
+      case symbol_kind::S_bond_token: // bond_token
         value.move< std::string_view > (that.value);
         break;
 
@@ -668,10 +620,10 @@ namespace smiles_parser {
 
 
     // User initialization code.
-#line 36 "smiles_grammar.yy"
+#line 27 "smiles_grammar.yy"
 { yyla.location.begin.column = 0; }
 
-#line 675 "smiles_grammar.cc"
+#line 627 "smiles_grammar.cc"
 
 
     /* Initialize the stack.  The initial state will be set in
@@ -792,14 +744,6 @@ namespace smiles_parser {
         yylhs.value.emplace< int > ();
         break;
 
-      case symbol_kind::S_mol: // mol
-        yylhs.value.emplace< mol_info > ();
-        break;
-
-      case symbol_kind::S_ring_number: // ring_number
-        yylhs.value.emplace< std::pair<std::string_view, bool> > ();
-        break;
-
       case symbol_kind::S_ATOM_SYMBOL: // ATOM_SYMBOL
       case symbol_kind::S_NESTED_ATOM: // NESTED_ATOM
       case symbol_kind::S_H_TOKEN: // H_TOKEN
@@ -807,7 +751,7 @@ namespace smiles_parser {
       case symbol_kind::S_BIOVIA_ATOM: // BIOVIA_ATOM
       case symbol_kind::S_CHIRAL_TAG: // CHIRAL_TAG
       case symbol_kind::S_NUMBER: // NUMBER
-      case symbol_kind::S_bond: // bond
+      case symbol_kind::S_bond_token: // bond_token
         yylhs.value.emplace< std::string_view > ();
         break;
 
@@ -831,303 +775,279 @@ namespace smiles_parser {
         {
           switch (yyn)
             {
-  case 2: // mol: atom
+  case 10: // sep: '.'
+#line 69 "smiles_grammar.yy"
+         { ast.add_sep_info(); }
+#line 782 "smiles_grammar.cc"
+    break;
+
+  case 11: // branch_open: '('
 #line 70 "smiles_grammar.yy"
-          {  auto i = ast.get_num_atoms(); yylhs.value.as < mol_info > () = { i, i, 1}; }
-#line 838 "smiles_grammar.cc"
+                  { ast.add_branch_info("("); }
+#line 788 "smiles_grammar.cc"
     break;
 
-  case 3: // mol: mol atom
+  case 12: // branch_close: ')'
 #line 71 "smiles_grammar.yy"
-               { yylhs.value.as < mol_info > () = yystack_[1].value.as < mol_info > ();  yylhs.value.as < mol_info > ().tail = yylhs.value.as < mol_info > ().head + yylhs.value.as < mol_info > ().size; ast.add_bond(yystack_[1].value.as < mol_info > ().tail, yylhs.value.as < mol_info > ().tail); ++yylhs.value.as < mol_info > ().size; }
-#line 844 "smiles_grammar.cc"
+                   { ast.add_branch_info(")"); }
+#line 794 "smiles_grammar.cc"
     break;
 
-  case 4: // mol: mol '.' atom
-#line 72 "smiles_grammar.yy"
-                   { yylhs.value.as < mol_info > () = yystack_[2].value.as < mol_info > ();  yylhs.value.as < mol_info > ().tail = yylhs.value.as < mol_info > ().head + yylhs.value.as < mol_info > ().size; ++yylhs.value.as < mol_info > ().size; }
-#line 850 "smiles_grammar.cc"
-    break;
-
-  case 5: // mol: mol bond atom
+  case 13: // bond: bond_token
 #line 73 "smiles_grammar.yy"
-                    { yylhs.value.as < mol_info > () = yystack_[2].value.as < mol_info > (); yylhs.value.as < mol_info > ().tail = yylhs.value.as < mol_info > ().head + yylhs.value.as < mol_info > ().size; ast.add_bond(yystack_[2].value.as < mol_info > ().tail, yylhs.value.as < mol_info > ().tail, yystack_[1].value.as < std::string_view > ()); ++yylhs.value.as < mol_info > ().size; }
-#line 856 "smiles_grammar.cc"
+                 { ast.add_bond(yystack_[0].value.as < std::string_view > ()); }
+#line 800 "smiles_grammar.cc"
     break;
 
-  case 6: // mol: mol ring_number
+  case 14: // bond_token: '-'
 #line 74 "smiles_grammar.yy"
-                      { yylhs.value.as < mol_info > () = yystack_[1].value.as < mol_info > (); ast.add_ring_info(yystack_[0].value.as < std::pair<std::string_view, bool> > ().first, "", yystack_[0].value.as < std::pair<std::string_view, bool> > ().second); }
-#line 862 "smiles_grammar.cc"
+                { yylhs.value.as < std::string_view > () = "-"; }
+#line 806 "smiles_grammar.cc"
     break;
 
-  case 7: // mol: mol bond ring_number
+  case 15: // bond_token: '='
 #line 75 "smiles_grammar.yy"
-                          { yylhs.value.as < mol_info > () = yystack_[2].value.as < mol_info > (); ast.add_ring_info(yystack_[0].value.as < std::pair<std::string_view, bool> > ().first, yystack_[1].value.as < std::string_view > (), yystack_[0].value.as < std::pair<std::string_view, bool> > ().second); }
-#line 868 "smiles_grammar.cc"
-    break;
-
-  case 8: // mol: mol '(' mol ')'
-#line 76 "smiles_grammar.yy"
-                      { yylhs.value.as < mol_info > () = yystack_[3].value.as < mol_info > (); ast.add_bond(yystack_[3].value.as < mol_info > ().tail, yystack_[1].value.as < mol_info > ().head); yylhs.value.as < mol_info > ().size += yystack_[1].value.as < mol_info > ().size; }
-#line 874 "smiles_grammar.cc"
-    break;
-
-  case 9: // mol: mol '(' bond mol ')'
-#line 77 "smiles_grammar.yy"
-                           { yylhs.value.as < mol_info > () = yystack_[4].value.as < mol_info > (); ast.add_bond(yystack_[4].value.as < mol_info > ().tail, yystack_[1].value.as < mol_info > ().head, yystack_[2].value.as < std::string_view > ()); yylhs.value.as < mol_info > ().size += yystack_[1].value.as < mol_info > ().size; }
-#line 880 "smiles_grammar.cc"
-    break;
-
-  case 10: // bond: '-'
-#line 80 "smiles_grammar.yy"
-          { yylhs.value.as < std::string_view > () = "-"; }
-#line 886 "smiles_grammar.cc"
-    break;
-
-  case 11: // bond: '='
-#line 81 "smiles_grammar.yy"
           { yylhs.value.as < std::string_view > () = "="; }
-#line 892 "smiles_grammar.cc"
+#line 812 "smiles_grammar.cc"
     break;
 
-  case 12: // bond: '#'
-#line 82 "smiles_grammar.yy"
+  case 16: // bond_token: '#'
+#line 76 "smiles_grammar.yy"
           { yylhs.value.as < std::string_view > () = "#"; }
-#line 898 "smiles_grammar.cc"
+#line 818 "smiles_grammar.cc"
     break;
 
-  case 13: // bond: ':'
-#line 83 "smiles_grammar.yy"
+  case 17: // bond_token: ':'
+#line 77 "smiles_grammar.yy"
           { yylhs.value.as < std::string_view > () = ":"; }
-#line 904 "smiles_grammar.cc"
+#line 824 "smiles_grammar.cc"
     break;
 
-  case 14: // bond: '$'
-#line 84 "smiles_grammar.yy"
+  case 18: // bond_token: '$'
+#line 78 "smiles_grammar.yy"
           { yylhs.value.as < std::string_view > () = "$"; }
-#line 910 "smiles_grammar.cc"
+#line 830 "smiles_grammar.cc"
     break;
 
-  case 15: // bond: '~'
-#line 85 "smiles_grammar.yy"
+  case 19: // bond_token: '~'
+#line 79 "smiles_grammar.yy"
           { yylhs.value.as < std::string_view > () = "~"; }
-#line 916 "smiles_grammar.cc"
+#line 836 "smiles_grammar.cc"
     break;
 
-  case 16: // bond: '-' '>'
-#line 86 "smiles_grammar.yy"
+  case 20: // bond_token: '-' '>'
+#line 80 "smiles_grammar.yy"
               { yylhs.value.as < std::string_view > () = "->"; }
-#line 922 "smiles_grammar.cc"
+#line 842 "smiles_grammar.cc"
     break;
 
-  case 17: // bond: '<' '-'
-#line 87 "smiles_grammar.yy"
+  case 21: // bond_token: '<' '-'
+#line 81 "smiles_grammar.yy"
               { yylhs.value.as < std::string_view > () = "<-"; }
-#line 928 "smiles_grammar.cc"
+#line 848 "smiles_grammar.cc"
     break;
 
-  case 18: // bond: '\\'
-#line 88 "smiles_grammar.yy"
+  case 22: // bond_token: '\\'
+#line 82 "smiles_grammar.yy"
            { yylhs.value.as < std::string_view > () = "\\"; }
-#line 934 "smiles_grammar.cc"
+#line 854 "smiles_grammar.cc"
     break;
 
-  case 19: // bond: '\\' '\\'
-#line 89 "smiles_grammar.yy"
+  case 23: // bond_token: '\\' '\\'
+#line 83 "smiles_grammar.yy"
                 { yylhs.value.as < std::string_view > () = "\\\\"; }
-#line 940 "smiles_grammar.cc"
+#line 860 "smiles_grammar.cc"
     break;
 
-  case 20: // bond: '/'
-#line 90 "smiles_grammar.yy"
+  case 24: // bond_token: '/'
+#line 84 "smiles_grammar.yy"
           { yylhs.value.as < std::string_view > () = "/"; }
-#line 946 "smiles_grammar.cc"
+#line 866 "smiles_grammar.cc"
     break;
 
-  case 21: // atom: ATOM_SYMBOL
-#line 93 "smiles_grammar.yy"
+  case 25: // atom: ATOM_SYMBOL
+#line 87 "smiles_grammar.yy"
                   { ast.add_atom(yystack_[0].value.as < std::string_view > ()); }
-#line 952 "smiles_grammar.cc"
+#line 872 "smiles_grammar.cc"
     break;
 
-  case 22: // atom: ORGANIC_ATOM
-#line 94 "smiles_grammar.yy"
+  case 26: // atom: ORGANIC_ATOM
+#line 88 "smiles_grammar.yy"
                    { ast.add_atom(yystack_[0].value.as < std::string_view > ()); }
-#line 958 "smiles_grammar.cc"
+#line 878 "smiles_grammar.cc"
     break;
 
-  case 25: // atom_map_number: NUMBER
-#line 98 "smiles_grammar.yy"
+  case 29: // atom_map_number: NUMBER
+#line 92 "smiles_grammar.yy"
                         { ast.add_atom_map_number(stoi(yystack_[0].value.as < std::string_view > ())); }
-#line 964 "smiles_grammar.cc"
+#line 884 "smiles_grammar.cc"
     break;
 
-  case 28: // charged_atom: uncharged_atom atom_charge
-#line 102 "smiles_grammar.yy"
+  case 32: // charged_atom: uncharged_atom atom_charge
+#line 96 "smiles_grammar.yy"
                                          { ast.add_atom_charge(yystack_[0].value.as < int > ()); }
-#line 970 "smiles_grammar.cc"
+#line 890 "smiles_grammar.cc"
     break;
 
-  case 29: // atom_charge: plus_signs
-#line 104 "smiles_grammar.yy"
+  case 33: // atom_charge: plus_signs
+#line 98 "smiles_grammar.yy"
              { yylhs.value.as < int > () = yystack_[0].value.as < int > (); }
-#line 976 "smiles_grammar.cc"
+#line 896 "smiles_grammar.cc"
     break;
 
-  case 30: // atom_charge: '+' NUMBER
-#line 104 "smiles_grammar.yy"
+  case 34: // atom_charge: '+' NUMBER
+#line 98 "smiles_grammar.yy"
                                      { yylhs.value.as < int > () = stoi(yystack_[0].value.as < std::string_view > ()); }
-#line 982 "smiles_grammar.cc"
+#line 902 "smiles_grammar.cc"
     break;
 
-  case 31: // atom_charge: minus_signs
-#line 105 "smiles_grammar.yy"
+  case 35: // atom_charge: minus_signs
+#line 99 "smiles_grammar.yy"
              { yylhs.value.as < int > () = yystack_[0].value.as < int > (); }
-#line 988 "smiles_grammar.cc"
+#line 908 "smiles_grammar.cc"
     break;
 
-  case 32: // atom_charge: '-' NUMBER
-#line 105 "smiles_grammar.yy"
+  case 36: // atom_charge: '-' NUMBER
+#line 99 "smiles_grammar.yy"
                                       { yylhs.value.as < int > () = -1 * stoi(yystack_[0].value.as < std::string_view > ()); }
-#line 994 "smiles_grammar.cc"
+#line 914 "smiles_grammar.cc"
     break;
 
-  case 33: // plus_signs: '+'
-#line 106 "smiles_grammar.yy"
+  case 37: // plus_signs: '+'
+#line 100 "smiles_grammar.yy"
                 { yylhs.value.as < int > () = 1; }
-#line 1000 "smiles_grammar.cc"
+#line 920 "smiles_grammar.cc"
     break;
 
-  case 34: // plus_signs: plus_signs '+'
-#line 106 "smiles_grammar.yy"
+  case 38: // plus_signs: plus_signs '+'
+#line 100 "smiles_grammar.yy"
                                              { yylhs.value.as < int > () = yystack_[1].value.as < int > () + 1; }
-#line 1006 "smiles_grammar.cc"
+#line 926 "smiles_grammar.cc"
     break;
 
-  case 35: // minus_signs: '-'
-#line 107 "smiles_grammar.yy"
+  case 39: // minus_signs: '-'
+#line 101 "smiles_grammar.yy"
                  { yylhs.value.as < int > () = -1; }
-#line 1012 "smiles_grammar.cc"
+#line 932 "smiles_grammar.cc"
     break;
 
-  case 36: // minus_signs: minus_signs '-'
-#line 107 "smiles_grammar.yy"
+  case 40: // minus_signs: minus_signs '-'
+#line 101 "smiles_grammar.yy"
                                                 { yylhs.value.as < int > () = yystack_[1].value.as < int > () - 1; }
-#line 1018 "smiles_grammar.cc"
+#line 938 "smiles_grammar.cc"
     break;
 
-  case 39: // atom_with_hs: singular_atom explicit_h
-#line 111 "smiles_grammar.yy"
+  case 43: // atom_with_hs: singular_atom explicit_h
+#line 105 "smiles_grammar.yy"
                                        { ast.add_explicit_h(yystack_[0].value.as < int > ()); }
-#line 1024 "smiles_grammar.cc"
+#line 944 "smiles_grammar.cc"
     break;
 
-  case 40: // explicit_h: H_TOKEN
-#line 112 "smiles_grammar.yy"
+  case 44: // explicit_h: H_TOKEN
+#line 106 "smiles_grammar.yy"
                     { yylhs.value.as < int > () = 1; }
-#line 1030 "smiles_grammar.cc"
+#line 950 "smiles_grammar.cc"
     break;
 
-  case 41: // explicit_h: H_TOKEN NUMBER
-#line 112 "smiles_grammar.yy"
+  case 45: // explicit_h: H_TOKEN NUMBER
+#line 106 "smiles_grammar.yy"
                                                  { yylhs.value.as < int > () = stoi(yystack_[0].value.as < std::string_view > ()); }
-#line 1036 "smiles_grammar.cc"
+#line 956 "smiles_grammar.cc"
     break;
 
-  case 45: // hydrogen_atom: H_TOKEN
-#line 116 "smiles_grammar.yy"
+  case 49: // hydrogen_atom: H_TOKEN
+#line 110 "smiles_grammar.yy"
                        { ast.add_atom(yystack_[0].value.as < std::string_view > ()); }
-#line 1042 "smiles_grammar.cc"
+#line 962 "smiles_grammar.cc"
     break;
 
-  case 46: // hydrogen_atom: NUMBER H_TOKEN
-#line 117 "smiles_grammar.yy"
+  case 50: // hydrogen_atom: NUMBER H_TOKEN
+#line 111 "smiles_grammar.yy"
                               { ast.add_atom(yystack_[0].value.as < std::string_view > ());
                                 ast.add_isotope_num(stoi(yystack_[1].value.as < std::string_view > ())); }
-#line 1049 "smiles_grammar.cc"
+#line 969 "smiles_grammar.cc"
     break;
 
-  case 47: // chiral_atom: achiral_atom '@'
-#line 120 "smiles_grammar.yy"
+  case 51: // chiral_atom: achiral_atom '@'
+#line 114 "smiles_grammar.yy"
                               { ast.add_chirality_tag("@"); }
-#line 1055 "smiles_grammar.cc"
+#line 975 "smiles_grammar.cc"
     break;
 
-  case 48: // chiral_atom: achiral_atom '@' '@'
-#line 121 "smiles_grammar.yy"
+  case 52: // chiral_atom: achiral_atom '@' '@'
+#line 115 "smiles_grammar.yy"
                                   { ast.add_chirality_tag("@@"); }
-#line 1061 "smiles_grammar.cc"
+#line 981 "smiles_grammar.cc"
     break;
 
-  case 49: // chiral_atom: achiral_atom CHIRAL_TAG
-#line 122 "smiles_grammar.yy"
+  case 53: // chiral_atom: achiral_atom CHIRAL_TAG
+#line 116 "smiles_grammar.yy"
                                      { ast.add_chirality_class(yystack_[0].value.as < std::string_view > ()); }
-#line 1067 "smiles_grammar.cc"
+#line 987 "smiles_grammar.cc"
     break;
 
-  case 50: // chiral_atom: achiral_atom CHIRAL_TAG NUMBER
-#line 123 "smiles_grammar.yy"
+  case 54: // chiral_atom: achiral_atom CHIRAL_TAG NUMBER
+#line 117 "smiles_grammar.yy"
                                             { ast.add_chirality_class(yystack_[1].value.as < std::string_view > (), yystack_[0].value.as < std::string_view > ()); }
-#line 1073 "smiles_grammar.cc"
+#line 993 "smiles_grammar.cc"
     break;
 
-  case 53: // non_hydrogen_isotope: NUMBER non_hydrogen_atom
-#line 127 "smiles_grammar.yy"
+  case 57: // non_hydrogen_isotope: NUMBER non_hydrogen_atom
+#line 121 "smiles_grammar.yy"
                                                { ast.add_isotope_num(stoi(yystack_[1].value.as < std::string_view > ())); }
-#line 1079 "smiles_grammar.cc"
+#line 999 "smiles_grammar.cc"
     break;
 
-  case 54: // non_hydrogen_atom: ATOM_SYMBOL
-#line 129 "smiles_grammar.yy"
+  case 58: // non_hydrogen_atom: ATOM_SYMBOL
+#line 123 "smiles_grammar.yy"
                                { ast.add_atom(yystack_[0].value.as < std::string_view > ()); }
-#line 1085 "smiles_grammar.cc"
+#line 1005 "smiles_grammar.cc"
     break;
 
-  case 55: // non_hydrogen_atom: ORGANIC_ATOM
-#line 130 "smiles_grammar.yy"
+  case 59: // non_hydrogen_atom: ORGANIC_ATOM
+#line 124 "smiles_grammar.yy"
                                 { ast.add_atom(yystack_[0].value.as < std::string_view > ()); }
-#line 1091 "smiles_grammar.cc"
+#line 1011 "smiles_grammar.cc"
     break;
 
-  case 56: // non_hydrogen_atom: NESTED_ATOM
-#line 131 "smiles_grammar.yy"
+  case 60: // non_hydrogen_atom: NESTED_ATOM
+#line 125 "smiles_grammar.yy"
                                { ast.add_atom(yystack_[0].value.as < std::string_view > ()); }
-#line 1097 "smiles_grammar.cc"
+#line 1017 "smiles_grammar.cc"
     break;
 
-  case 57: // non_hydrogen_atom: '#' NUMBER
-#line 132 "smiles_grammar.yy"
+  case 61: // non_hydrogen_atom: '#' NUMBER
+#line 126 "smiles_grammar.yy"
                               { ast.add_atom(yystack_[0].value.as < std::string_view > ()); }
-#line 1103 "smiles_grammar.cc"
+#line 1023 "smiles_grammar.cc"
     break;
 
-  case 58: // non_hydrogen_atom: BIOVIA_ATOM
-#line 133 "smiles_grammar.yy"
+  case 62: // non_hydrogen_atom: BIOVIA_ATOM
+#line 127 "smiles_grammar.yy"
                                { ast.add_atom(yystack_[0].value.as < std::string_view > ()); }
-#line 1109 "smiles_grammar.cc"
+#line 1029 "smiles_grammar.cc"
     break;
 
-  case 59: // ring_number: NUMBER
-#line 135 "smiles_grammar.yy"
-                    { yylhs.value.as < std::pair<std::string_view, bool> > () = { yystack_[0].value.as < std::string_view > (), false }; }
-#line 1115 "smiles_grammar.cc"
+  case 63: // ring_number: NUMBER
+#line 129 "smiles_grammar.yy"
+                    { ast.add_ring_info(yystack_[0].value.as < std::string_view > (), false); }
+#line 1035 "smiles_grammar.cc"
     break;
 
-  case 60: // ring_number: '%' NUMBER
-#line 136 "smiles_grammar.yy"
-                        { yylhs.value.as < std::pair<std::string_view, bool> > () = { yystack_[0].value.as < std::string_view > (), true }; }
-#line 1121 "smiles_grammar.cc"
+  case 64: // ring_number: '%' NUMBER
+#line 130 "smiles_grammar.yy"
+                        { ast.add_ring_info(yystack_[0].value.as < std::string_view > (), true); }
+#line 1041 "smiles_grammar.cc"
     break;
 
-  case 61: // ring_number: '%' '(' NUMBER ')'
-#line 137 "smiles_grammar.yy"
-                                { yylhs.value.as < std::pair<std::string_view, bool> > () = { yystack_[1].value.as < std::string_view > (), true }; }
-#line 1127 "smiles_grammar.cc"
+  case 65: // ring_number: '%' '(' NUMBER ')'
+#line 131 "smiles_grammar.yy"
+                                { ast.add_ring_info(yystack_[1].value.as < std::string_view > (), true); }
+#line 1047 "smiles_grammar.cc"
     break;
 
 
-#line 1131 "smiles_grammar.cc"
+#line 1051 "smiles_grammar.cc"
 
             default:
               break;
@@ -1320,123 +1240,122 @@ namespace smiles_parser {
 
 
 
-  const signed char SmilesTokenParser::yypact_ninf_ = -26;
+  const signed char SmilesTokenParser::yypact_ninf_ = -36;
 
   const signed char SmilesTokenParser::yytable_ninf_ = -1;
 
   const signed char
   SmilesTokenParser::yypact_[] =
   {
-       3,   -26,   -26,    91,     2,   -26,   -26,   -26,   -26,   -26,
-     -26,   120,    -6,    12,   -26,    14,   -26,    -1,   -26,   -26,
-       6,   -26,   -26,   -26,   -26,     3,    99,   -12,   -26,   -26,
-     -26,   -26,   -26,    -3,     9,   -26,    47,    84,   -26,   -26,
-     -26,   -26,   -26,    25,   -26,    28,    31,   -26,    35,    44,
-      52,   -26,    53,    37,   -26,    32,     3,   -26,   -26,   -26,
-     -26,    55,   -26,   -26,   -26,    42,   -26,   -26,   -26,   -26,
-     -26,   -26,   -26,   -26,    62,    57,   -26,   -26,   -26
+       2,   -36,   -36,    76,     1,   -36,   -36,   -36,   -36,   -36,
+     -36,    83,    -3,    45,   -36,    71,   -36,     4,   -36,   -36,
+      -6,   -36,   -36,   -36,   -36,   -36,   -36,     7,   -36,   -36,
+     -36,   -36,   -36,     0,     6,   -36,    21,     2,    50,    51,
+     -36,   -36,   -36,   -36,   -36,   -36,    27,   -36,    38,    43,
+     -36,    33,    49,    67,   -36,    68,    66,   -36,   -36,   -36,
+     -36,    84,   -36,    28,     2,   -36,   -36,   -36,    70,   -36,
+     -36,   -36,   -36,   -36,   -36,   -36,    85,   -36,   -36,    28,
+     -36,   -36,   -36
   };
 
   const signed char
   SmilesTokenParser::yydefact_[] =
   {
-       0,    21,    22,     0,     0,     2,    54,    56,    45,    55,
-      58,     0,     0,     0,    27,    26,    38,    37,    42,    44,
-      43,    52,    51,     1,    59,     0,     0,    10,    11,    12,
-      13,    14,    15,     0,    18,    20,     0,     0,     3,     6,
-      46,    53,    57,     0,    24,    35,    33,    28,    29,    31,
-      40,    39,    49,    47,     4,     0,     0,    16,    17,    19,
-      60,     0,     5,     7,    25,     0,    32,    30,    34,    36,
-      41,    50,    48,     8,     0,     0,    23,     9,    61
+       0,    25,    26,     0,     0,     2,    58,    60,    49,    59,
+      62,     0,     0,     0,    31,    30,    42,    41,    46,    48,
+      47,    56,    55,     1,    63,    10,    11,    14,    15,    16,
+      17,    18,    19,     0,    22,    24,     0,     0,     0,     0,
+      13,     3,     6,    50,    57,    61,     0,    28,    39,    37,
+      32,    33,    35,    44,    43,    53,    51,    20,    21,    23,
+      64,     0,     4,     0,     0,     5,     7,    29,     0,    36,
+      34,    38,    40,    45,    54,    52,     0,    12,     8,     0,
+      27,    65,     9
   };
 
   const signed char
   SmilesTokenParser::yypgoto_[] =
   {
-     -26,   -25,    41,    -4,   -26,   -26,   -26,   -26,   -26,   -26,
-     -26,   -26,   -26,   -26,   -26,   -26,   -26,   -26,    70,    49
+     -36,   -35,   -36,   -36,    16,    61,   -36,    -4,   -36,   -36,
+     -36,   -36,   -36,   -36,   -36,   -36,   -36,   -36,   -36,   -36,
+     -36,   -36,    89,    62
   };
 
   const signed char
   SmilesTokenParser::yydefgoto_[] =
   {
-       0,     4,    37,     5,    65,    13,    14,    47,    48,    49,
-      15,    16,    51,    17,    18,    19,    20,    21,    22,    39
+       0,     4,    37,    38,    78,    39,    40,     5,    68,    13,
+      14,    50,    51,    52,    15,    16,    54,    17,    18,    19,
+      20,    21,    22,    42
   };
 
   const signed char
   SmilesTokenParser::yytable_[] =
   {
-      38,    55,    23,    42,    50,     1,     1,    57,     2,     2,
-      58,    24,    25,    26,    52,    27,    28,    29,    30,    31,
-      32,    54,    33,    34,    35,     3,     3,    45,    43,    36,
-      59,    74,    53,    62,    64,     1,    44,    66,     2,    46,
-      67,    24,    25,    26,    73,    27,    28,    29,    30,    31,
-      32,    38,    33,    34,    35,     3,    60,    69,    61,    36,
-      68,    70,    71,    72,    75,     1,    76,    56,     2,    78,
-      38,    24,    25,    26,    77,    27,    28,    29,    30,    31,
-      32,    41,    33,    34,    35,     3,    63,     1,     0,    36,
-       2,     0,     0,    24,     6,     7,     8,     9,    10,     0,
-      11,     0,     1,     0,     0,     2,    12,     3,     0,     0,
-       0,    36,    27,    28,    29,    30,    31,    32,     0,    33,
-      34,    35,     3,     6,     7,    40,     9,    10,     0,     0,
-       0,     0,     0,     0,     0,    12
+      41,    23,    55,    63,     1,     1,    45,     2,     2,    53,
+      24,    25,    26,    58,    27,    28,    29,    30,    31,    32,
+      56,    33,    34,    35,     3,     3,    57,    59,    36,    79,
+      60,     1,    61,    62,     2,    65,    67,    24,    25,    26,
+      77,    27,    28,    29,    30,    31,    32,    69,    33,    34,
+      35,     3,    70,     1,     1,    36,     2,     2,    71,    41,
+      24,    46,    72,    27,    28,    29,    30,    31,    32,    47,
+      33,    34,    35,     3,     3,    41,    73,    74,    36,     6,
+       7,     8,     9,    10,    48,    11,     6,     7,    43,     9,
+      10,    12,    75,    76,    80,    82,    49,    81,    12,    64,
+      44,    66
   };
 
   const signed char
   SmilesTokenParser::yycheck_[] =
   {
-       4,    26,     0,     9,     5,     3,     3,    19,     6,     6,
-      13,     9,    10,    11,     8,    13,    14,    15,    16,    17,
-      18,    25,    20,    21,    22,    23,    23,    13,    16,    27,
-      21,    56,    26,    37,     9,     3,    24,     9,     6,    25,
-       9,     9,    10,    11,    12,    13,    14,    15,    16,    17,
-      18,    55,    20,    21,    22,    23,     9,    13,    11,    27,
-      25,     9,     9,    26,     9,     3,    24,    26,     6,    12,
-      74,     9,    10,    11,    12,    13,    14,    15,    16,    17,
-      18,    11,    20,    21,    22,    23,    37,     3,    -1,    27,
-       6,    -1,    -1,     9,     3,     4,     5,     6,     7,    -1,
-       9,    -1,     3,    -1,    -1,     6,    15,    23,    -1,    -1,
-      -1,    27,    13,    14,    15,    16,    17,    18,    -1,    20,
-      21,    22,    23,     3,     4,     5,     6,     7,    -1,    -1,
-      -1,    -1,    -1,    -1,    -1,    15
+       4,     0,     8,    38,     3,     3,     9,     6,     6,     5,
+       9,    10,    11,    13,    13,    14,    15,    16,    17,    18,
+      26,    20,    21,    22,    23,    23,    19,    21,    27,    64,
+       9,     3,    11,    37,     6,    39,     9,     9,    10,    11,
+      12,    13,    14,    15,    16,    17,    18,     9,    20,    21,
+      22,    23,     9,     3,     3,    27,     6,     6,    25,    63,
+       9,    16,    13,    13,    14,    15,    16,    17,    18,    24,
+      20,    21,    22,    23,    23,    79,     9,     9,    27,     3,
+       4,     5,     6,     7,    13,     9,     3,     4,     5,     6,
+       7,    15,    26,     9,    24,    79,    25,    12,    15,    38,
+      11,    39
   };
 
   const signed char
   SmilesTokenParser::yystos_[] =
   {
-       0,     3,     6,    23,    29,    31,     3,     4,     5,     6,
-       7,     9,    15,    33,    34,    38,    39,    41,    42,    43,
-      44,    45,    46,     0,     9,    10,    11,    13,    14,    15,
-      16,    17,    18,    20,    21,    22,    27,    30,    31,    47,
-       5,    46,     9,    16,    24,    13,    25,    35,    36,    37,
-       5,    40,     8,    26,    31,    29,    30,    19,    13,    21,
-       9,    11,    31,    47,     9,    32,     9,     9,    25,    13,
-       9,     9,    26,    12,    29,     9,    24,    12,    12
+       0,     3,     6,    23,    29,    35,     3,     4,     5,     6,
+       7,     9,    15,    37,    38,    42,    43,    45,    46,    47,
+      48,    49,    50,     0,     9,    10,    11,    13,    14,    15,
+      16,    17,    18,    20,    21,    22,    27,    30,    31,    33,
+      34,    35,    51,     5,    50,     9,    16,    24,    13,    25,
+      39,    40,    41,     5,    44,     8,    26,    19,    13,    21,
+       9,    11,    35,    29,    33,    35,    51,     9,    36,     9,
+       9,    25,    13,     9,     9,    26,     9,    12,    32,    29,
+      24,    12,    32
   };
 
   const signed char
   SmilesTokenParser::yyr1_[] =
   {
        0,    28,    29,    29,    29,    29,    29,    29,    29,    29,
-      30,    30,    30,    30,    30,    30,    30,    30,    30,    30,
-      30,    31,    31,    31,    31,    32,    33,    33,    34,    35,
-      35,    35,    35,    36,    36,    37,    37,    38,    38,    39,
-      40,    40,    41,    41,    41,    42,    42,    43,    43,    43,
-      43,    44,    44,    45,    46,    46,    46,    46,    46,    47,
-      47,    47
+      30,    31,    32,    33,    34,    34,    34,    34,    34,    34,
+      34,    34,    34,    34,    34,    35,    35,    35,    35,    36,
+      37,    37,    38,    39,    39,    39,    39,    40,    40,    41,
+      41,    42,    42,    43,    44,    44,    45,    45,    45,    46,
+      46,    47,    47,    47,    47,    48,    48,    49,    50,    50,
+      50,    50,    50,    51,    51,    51
   };
 
   const signed char
   SmilesTokenParser::yyr2_[] =
   {
        0,     2,     1,     2,     3,     3,     2,     3,     4,     5,
-       1,     1,     1,     1,     1,     1,     2,     2,     1,     2,
-       1,     1,     1,     5,     3,     1,     1,     1,     2,     1,
-       2,     1,     2,     1,     2,     1,     2,     1,     1,     2,
-       1,     2,     1,     1,     1,     1,     2,     2,     3,     2,
-       3,     1,     1,     2,     1,     1,     1,     2,     1,     1,
-       2,     4
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       2,     2,     1,     2,     1,     1,     1,     5,     3,     1,
+       1,     1,     2,     1,     2,     1,     2,     1,     2,     1,
+       2,     1,     1,     2,     1,     2,     1,     1,     1,     1,
+       2,     2,     3,     2,     3,     1,     1,     2,     1,     1,
+       1,     2,     1,     1,     2,     4
   };
 
 
@@ -1450,10 +1369,11 @@ namespace smiles_parser {
   "NESTED_ATOM", "H_TOKEN", "ORGANIC_ATOM", "BIOVIA_ATOM", "CHIRAL_TAG",
   "NUMBER", "'.'", "'('", "')'", "'-'", "'='", "'#'", "':'", "'$'", "'~'",
   "'>'", "'<'", "'\\\\'", "'/'", "'['", "']'", "'+'", "'@'", "'%'",
-  "$accept", "mol", "bond", "atom", "atom_map_number", "complex_atom",
-  "charged_atom", "atom_charge", "plus_signs", "minus_signs",
-  "uncharged_atom", "atom_with_hs", "explicit_h", "singular_atom",
-  "hydrogen_atom", "chiral_atom", "achiral_atom", "non_hydrogen_isotope",
+  "$accept", "mol", "sep", "branch_open", "branch_close", "bond",
+  "bond_token", "atom", "atom_map_number", "complex_atom", "charged_atom",
+  "atom_charge", "plus_signs", "minus_signs", "uncharged_atom",
+  "atom_with_hs", "explicit_h", "singular_atom", "hydrogen_atom",
+  "chiral_atom", "achiral_atom", "non_hydrogen_isotope",
   "non_hydrogen_atom", "ring_number", YY_NULLPTR
   };
 #endif
@@ -1463,13 +1383,13 @@ namespace smiles_parser {
   const unsigned char
   SmilesTokenParser::yyrline_[] =
   {
-       0,    70,    70,    71,    72,    73,    74,    75,    76,    77,
-      80,    81,    82,    83,    84,    85,    86,    87,    88,    89,
-      90,    93,    94,    95,    96,    98,   100,   100,   102,   104,
-     104,   105,   105,   106,   106,   107,   107,   109,   109,   111,
-     112,   112,   114,   114,   114,   116,   117,   120,   121,   122,
-     123,   125,   125,   127,   129,   130,   131,   132,   133,   135,
-     136,   137
+       0,    59,    59,    60,    61,    62,    63,    64,    65,    66,
+      69,    70,    71,    73,    74,    75,    76,    77,    78,    79,
+      80,    81,    82,    83,    84,    87,    88,    89,    90,    92,
+      94,    94,    96,    98,    98,    99,    99,   100,   100,   101,
+     101,   103,   103,   105,   106,   106,   108,   108,   108,   110,
+     111,   114,   115,   116,   117,   119,   119,   121,   123,   124,
+     125,   126,   127,   129,   130,   131
   };
 
   void
@@ -1549,9 +1469,9 @@ namespace smiles_parser {
 
 #line 5 "smiles_grammar.yy"
 } // smiles_parser
-#line 1553 "smiles_grammar.cc"
+#line 1473 "smiles_grammar.cc"
 
-#line 138 "smiles_grammar.yy"
+#line 132 "smiles_grammar.yy"
 
 
 void smiles_parser::SmilesTokenParser::error(const location& loc, const std::string& msg) {

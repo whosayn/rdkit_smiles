@@ -19,15 +19,6 @@ namespace smiles_parser {
 
 class SmilesTokenScanner;
 class SmilesASTBuilder;
-
-namespace {
-struct mol_info {
-    size_t head;
-    size_t tail;
-    size_t size;
-};
-}
-
 }
 }
 
@@ -57,27 +48,30 @@ namespace {
 
 %token <std::string_view> ATOM_SYMBOL NESTED_ATOM H_TOKEN ORGANIC_ATOM BIOVIA_ATOM CHIRAL_TAG NUMBER;
 
-%type <std::pair<std::string_view, bool>> ring_number;
-%type <std::string_view> bond;
+%type <std::string_view> bond_token;
 %type <int> minus_signs plus_signs atom_charge explicit_h;
-%type <mol_info> mol;
 
 
 %start mol
 
 %%
 // FIX: mol MINUS DIGIT
-mol: atom {  auto i = ast.get_num_atoms(); $$ = { i, i, 1}; }
-   | mol atom  { $$ = $1;  $$.tail = $$.head + $$.size; ast.add_bond($1.tail, $$.tail); ++$$.size; }
-   | mol '.' atom  { $$ = $1;  $$.tail = $$.head + $$.size; ++$$.size; }
-   | mol bond atom  { $$ = $1; $$.tail = $$.head + $$.size; ast.add_bond($1.tail, $$.tail, $2); ++$$.size; }
-   | mol ring_number  { $$ = $1; ast.add_ring_info($2.first, "", $2.second); }
-   | mol bond ring_number { $$ = $1; ast.add_ring_info($3.first, $2, $3.second); }
-   | mol '(' mol ')'  { $$ = $1; ast.add_bond($1.tail, $3.head); $$.size += $3.size; }
-   | mol '(' bond mol ')'  { $$ = $1; ast.add_bond($1.tail, $4.head, $3); $$.size += $4.size; }
+mol: atom
+   | mol atom
+   | mol sep atom
+   | mol bond atom
+   | mol ring_number
+   | mol bond ring_number
+   | mol branch_open mol branch_close
+   | mol branch_open bond mol branch_close
    ;
 
-bond: '-' { $$ = "-"; }
+sep: '.' { ast.add_sep_info(); }
+branch_open: '('  { ast.add_branch_info("("); }
+branch_close: ')'  { ast.add_branch_info(")"); }
+
+bond: bond_token { ast.add_bond($1); }
+bond_token: '-' { $$ = "-"; }
     | '=' { $$ = "="; }
     | '#' { $$ = "#"; }
     | ':' { $$ = ":"; }
@@ -132,9 +126,9 @@ non_hydrogen_atom: ATOM_SYMBOL { ast.add_atom($1); }
                  | '#' NUMBER { ast.add_atom($2); }
                  | BIOVIA_ATOM { ast.add_atom($1); }
 
-ring_number: NUMBER { $$ = { $1, false }; }
-           | '%' NUMBER { $$ = { $2, true }; }
-           | '%' '(' NUMBER ')' { $$ = { $3, true }; };
+ring_number: NUMBER { ast.add_ring_info($1, false); }
+           | '%' NUMBER { ast.add_ring_info($2, true); }
+           | '%' '(' NUMBER ')' { ast.add_ring_info($3, true); };
 %%
 
 void smiles_parser::SmilesTokenParser::error(const location& loc, const std::string& msg) {

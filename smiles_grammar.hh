@@ -53,18 +53,9 @@ namespace smiles_parser {
 
 class SmilesTokenScanner;
 class SmilesASTBuilder;
-
-namespace {
-struct mol_info {
-    size_t head;
-    size_t tail;
-    size_t size;
-};
 }
 
-}
-
-#line 68 "smiles_grammar.hh"
+#line 59 "smiles_grammar.hh"
 
 
 # include <cstdlib> // std::abort
@@ -200,7 +191,7 @@ struct mol_info {
 
 #line 5 "smiles_grammar.yy"
 namespace smiles_parser {
-#line 204 "smiles_grammar.hh"
+#line 195 "smiles_grammar.hh"
 
 
 
@@ -402,12 +393,6 @@ namespace smiles_parser {
       // explicit_h
       char dummy1[sizeof (int)];
 
-      // mol
-      char dummy2[sizeof (mol_info)];
-
-      // ring_number
-      char dummy3[sizeof (std::pair<std::string_view, bool>)];
-
       // ATOM_SYMBOL
       // NESTED_ATOM
       // H_TOKEN
@@ -415,8 +400,8 @@ namespace smiles_parser {
       // BIOVIA_ATOM
       // CHIRAL_TAG
       // NUMBER
-      // bond
-      char dummy4[sizeof (std::string_view)];
+      // bond_token
+      char dummy2[sizeof (std::string_view)];
     };
 
     /// The size of the largest semantic type.
@@ -521,24 +506,28 @@ namespace smiles_parser {
         S_27_ = 27,                              // '%'
         S_YYACCEPT = 28,                         // $accept
         S_mol = 29,                              // mol
-        S_bond = 30,                             // bond
-        S_atom = 31,                             // atom
-        S_atom_map_number = 32,                  // atom_map_number
-        S_complex_atom = 33,                     // complex_atom
-        S_charged_atom = 34,                     // charged_atom
-        S_atom_charge = 35,                      // atom_charge
-        S_plus_signs = 36,                       // plus_signs
-        S_minus_signs = 37,                      // minus_signs
-        S_uncharged_atom = 38,                   // uncharged_atom
-        S_atom_with_hs = 39,                     // atom_with_hs
-        S_explicit_h = 40,                       // explicit_h
-        S_singular_atom = 41,                    // singular_atom
-        S_hydrogen_atom = 42,                    // hydrogen_atom
-        S_chiral_atom = 43,                      // chiral_atom
-        S_achiral_atom = 44,                     // achiral_atom
-        S_non_hydrogen_isotope = 45,             // non_hydrogen_isotope
-        S_non_hydrogen_atom = 46,                // non_hydrogen_atom
-        S_ring_number = 47                       // ring_number
+        S_sep = 30,                              // sep
+        S_branch_open = 31,                      // branch_open
+        S_branch_close = 32,                     // branch_close
+        S_bond = 33,                             // bond
+        S_bond_token = 34,                       // bond_token
+        S_atom = 35,                             // atom
+        S_atom_map_number = 36,                  // atom_map_number
+        S_complex_atom = 37,                     // complex_atom
+        S_charged_atom = 38,                     // charged_atom
+        S_atom_charge = 39,                      // atom_charge
+        S_plus_signs = 40,                       // plus_signs
+        S_minus_signs = 41,                      // minus_signs
+        S_uncharged_atom = 42,                   // uncharged_atom
+        S_atom_with_hs = 43,                     // atom_with_hs
+        S_explicit_h = 44,                       // explicit_h
+        S_singular_atom = 45,                    // singular_atom
+        S_hydrogen_atom = 46,                    // hydrogen_atom
+        S_chiral_atom = 47,                      // chiral_atom
+        S_achiral_atom = 48,                     // achiral_atom
+        S_non_hydrogen_isotope = 49,             // non_hydrogen_isotope
+        S_non_hydrogen_atom = 50,                // non_hydrogen_atom
+        S_ring_number = 51                       // ring_number
       };
     };
 
@@ -582,14 +571,6 @@ namespace smiles_parser {
         value.move< int > (std::move (that.value));
         break;
 
-      case symbol_kind::S_mol: // mol
-        value.move< mol_info > (std::move (that.value));
-        break;
-
-      case symbol_kind::S_ring_number: // ring_number
-        value.move< std::pair<std::string_view, bool> > (std::move (that.value));
-        break;
-
       case symbol_kind::S_ATOM_SYMBOL: // ATOM_SYMBOL
       case symbol_kind::S_NESTED_ATOM: // NESTED_ATOM
       case symbol_kind::S_H_TOKEN: // H_TOKEN
@@ -597,7 +578,7 @@ namespace smiles_parser {
       case symbol_kind::S_BIOVIA_ATOM: // BIOVIA_ATOM
       case symbol_kind::S_CHIRAL_TAG: // CHIRAL_TAG
       case symbol_kind::S_NUMBER: // NUMBER
-      case symbol_kind::S_bond: // bond
+      case symbol_kind::S_bond_token: // bond_token
         value.move< std::string_view > (std::move (that.value));
         break;
 
@@ -632,34 +613,6 @@ namespace smiles_parser {
       {}
 #else
       basic_symbol (typename Base::kind_type t, const int& v, const location_type& l)
-        : Base (t)
-        , value (v)
-        , location (l)
-      {}
-#endif
-
-#if 201103L <= YY_CPLUSPLUS
-      basic_symbol (typename Base::kind_type t, mol_info&& v, location_type&& l)
-        : Base (t)
-        , value (std::move (v))
-        , location (std::move (l))
-      {}
-#else
-      basic_symbol (typename Base::kind_type t, const mol_info& v, const location_type& l)
-        : Base (t)
-        , value (v)
-        , location (l)
-      {}
-#endif
-
-#if 201103L <= YY_CPLUSPLUS
-      basic_symbol (typename Base::kind_type t, std::pair<std::string_view, bool>&& v, location_type&& l)
-        : Base (t)
-        , value (std::move (v))
-        , location (std::move (l))
-      {}
-#else
-      basic_symbol (typename Base::kind_type t, const std::pair<std::string_view, bool>& v, const location_type& l)
         : Base (t)
         , value (v)
         , location (l)
@@ -711,14 +664,6 @@ switch (yykind)
         value.template destroy< int > ();
         break;
 
-      case symbol_kind::S_mol: // mol
-        value.template destroy< mol_info > ();
-        break;
-
-      case symbol_kind::S_ring_number: // ring_number
-        value.template destroy< std::pair<std::string_view, bool> > ();
-        break;
-
       case symbol_kind::S_ATOM_SYMBOL: // ATOM_SYMBOL
       case symbol_kind::S_NESTED_ATOM: // NESTED_ATOM
       case symbol_kind::S_H_TOKEN: // H_TOKEN
@@ -726,7 +671,7 @@ switch (yykind)
       case symbol_kind::S_BIOVIA_ATOM: // BIOVIA_ATOM
       case symbol_kind::S_CHIRAL_TAG: // CHIRAL_TAG
       case symbol_kind::S_NUMBER: // NUMBER
-      case symbol_kind::S_bond: // bond
+      case symbol_kind::S_bond_token: // bond_token
         value.template destroy< std::string_view > ();
         break;
 
@@ -1342,8 +1287,8 @@ switch (yykind)
     /// Constants.
     enum
     {
-      yylast_ = 135,     ///< Last index in yytable_.
-      yynnts_ = 20,  ///< Number of nonterminal symbols.
+      yylast_ = 101,     ///< Last index in yytable_.
+      yynnts_ = 24,  ///< Number of nonterminal symbols.
       yyfinal_ = 23 ///< Termination state number.
     };
 
@@ -1357,7 +1302,7 @@ switch (yykind)
 
 #line 5 "smiles_grammar.yy"
 } // smiles_parser
-#line 1361 "smiles_grammar.hh"
+#line 1306 "smiles_grammar.hh"
 
 
 

@@ -11,50 +11,47 @@
 namespace smiles_parser {
 
 void SmilesASTBuilder::add_atom(std::string_view atom_name) {
-  d_mol.atoms.push_back({atom_name});
+  d_events.push_back(AtomInfo{atom_name});
 }
 
 void SmilesASTBuilder::add_explicit_h(size_t count) {
-  d_mol.atoms.back().explicit_h_count += count;
+  std::get<AtomInfo>(d_events.back()).explicit_h_count += count;
 }
 
 void SmilesASTBuilder::add_isotope_num(size_t isotope_num) {
-  d_mol.atoms.back().isotope = isotope_num;
+  std::get<AtomInfo>(d_events.back()).isotope = isotope_num;
 }
 
 void SmilesASTBuilder::add_chirality_tag(std::string_view chirality_tag) {
-  if (!d_mol.atoms.back().chirality) {
-    d_mol.atoms.back().chirality = AtomChiralityInfo{};
+  if (!std::get<AtomInfo>(d_events.back()).chirality) {
+    std::get<AtomInfo>(d_events.back()).chirality = AtomChiralityInfo{};
   }
 
-  auto& chirality_info = *d_mol.atoms.back().chirality;
+  auto& chirality_info = *std::get<AtomInfo>(d_events.back()).chirality;
   chirality_info.chirality_tag = chirality_tag;
 }
 
 void SmilesASTBuilder::add_chirality_class(
     std::string_view chirality_class, std::string_view chiral_permutation) {
-  if (!d_mol.atoms.back().chirality) {
-    d_mol.atoms.back().chirality = AtomChiralityInfo{};
+  if (!std::get<AtomInfo>(d_events.back()).chirality) {
+    std::get<AtomInfo>(d_events.back()).chirality = AtomChiralityInfo{};
   }
 
-  auto& chirality_info = *d_mol.atoms.back().chirality;
+  auto& chirality_info = *std::get<AtomInfo>(d_events.back()).chirality;
   chirality_info.chirality_class = chirality_class;
   chirality_info.chiral_permutation = chiral_permutation;
 }
 
 void SmilesASTBuilder::add_atom_charge(int atom_charge) {
-  d_mol.atoms.back().formal_charge = atom_charge;
+  std::get<AtomInfo>(d_events.back()).formal_charge = atom_charge;
 }
 
 void SmilesASTBuilder::add_atom_map_number(size_t atom_map_number) {
-  d_mol.atoms.back().map_number = atom_map_number;
+  std::get<AtomInfo>(d_events.back()).map_number = atom_map_number;
 }
 
-size_t SmilesASTBuilder::get_num_atoms() { return d_mol.atoms.size(); }
-
-void SmilesASTBuilder::add_bond(size_t atom1, size_t atom2,
-                                std::string_view bond_token) {
-  d_mol.bonds.push_back({atom1 - 1, atom2 - 1, bond_token});
+void SmilesASTBuilder::add_bond(std::string_view bond_token) {
+  d_events.push_back(BondInfo{bond_token});
 }
 
 // NOTE: Add test about this example i.e what bond determines the bond type of
@@ -64,32 +61,53 @@ void SmilesASTBuilder::add_bond(size_t atom1, size_t atom2,
 // >>> Chem.MolToSmiles(Chem.MolFromSmiles("c=1ccc-1"))
 // 'C1=C=CC=1'
 void SmilesASTBuilder::add_ring_info(std::string_view ring_number,
-                                     std::string_view bond_token,
                                      bool use_as_is) {
-  auto ring_atom = get_num_atoms() - 1;
   // NOTE: if the ring number consists of multiple numbers, we should count
   // each number as a separate ring. This doesn't apply to '10' or when the
   // token follows a '%' token
   if (use_as_is) {
-    d_mol.rings.push_back({ring_number, ring_atom, bond_token});
+    d_events.push_back(RingInfo{ring_number});
     return;
   }
 
   // Checking for 10
   if (ring_number.size() == 2 && ring_number == "10") {
-    d_mol.rings.push_back({ring_number, ring_atom, bond_token});
+    d_events.push_back(RingInfo{ring_number});
     return;
   }
 
   for (size_t i = 0; i < ring_number.size(); ++i) {
-    d_mol.rings.push_back({ring_number.substr(i, 1), ring_atom, bond_token});
+    d_events.push_back(RingInfo{ring_number.substr(i, 1)});
   }
 }
 
+void SmilesASTBuilder::add_branch_info(std::string_view branch_token) {
+    d_events.push_back(BranchInfo{branch_token});
+}
+
+void SmilesASTBuilder::add_sep_info() {
+    d_events.push_back(SepInfo{});
+}
+
+template<class... Ts>
+struct overloaded : Ts... { using Ts::operator()...; };
+template<class... Ts>
+overloaded(Ts...) -> overloaded<Ts...>;
+
+  std::vector<std::variant<SepInfo, BranchInfo, AtomInfo, BondInfo, RingInfo>> d_events;
 MolInfo SmilesASTBuilder::finalize() {
-  auto mol = std::exchange(d_mol, {});
-  std::sort(mol.bonds.begin(), mol.bonds.end(),
-            [](auto& b1, auto& b2) { return b1.end_atom < b2.end_atom; });
+    std::cout << "events: ";
+  for (auto& v : d_events) {
+    std::visit(overloaded{
+            [](SepInfo&) { std::cout << "."; },
+            [](AtomInfo& a) { std::cout << a.name ; },
+            [](auto& a) { std::cout << a.token; }
+        }, v);
+  }
+  std::cout << std::endl;
+  //auto mol = std::exchange(d_mol, {});
+  auto mol = MolInfo{};
+  std::cout << "num events: " << d_events.size() << std::endl;
   return mol;
 }
 
@@ -156,6 +174,7 @@ static void validate_atoms(std::vector<AtomInfo>& atoms) {
 }
 
 static void validate_rings(const std::vector<RingInfo>& rings) {
+    /*
   std::unordered_map<std::string_view, const RingInfo&> seen_rings;
   seen_rings.reserve(rings.size());
   for (auto& ring_info : rings) {
@@ -187,6 +206,7 @@ static void validate_rings(const std::vector<RingInfo>& rings) {
       std::cerr << ring_number << std::endl;
     }
   }
+  */
 }
 
 std::optional<MolInfo> parse(std::string_view val) {
@@ -201,7 +221,7 @@ std::optional<MolInfo> parse(std::string_view val) {
 
   auto mol = ast_builder.finalize();
   validate_atoms(mol.atoms);
-  validate_rings(mol.rings);
+  //validate_rings(mol.rings);
   return std::make_optional<MolInfo>(std::move(mol));
 }
 }  // namespace smiles_parser

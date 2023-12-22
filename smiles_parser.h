@@ -2,6 +2,7 @@
 
 #include <optional>
 #include <string>
+#include <variant>
 #include <vector>
 
 namespace smiles_parser {
@@ -23,16 +24,19 @@ struct AtomInfo {
 };
 
 struct BondInfo {
-  size_t begin_atom;
-  size_t end_atom;
-  std::string_view bond_token;
+  std::string_view token;
 };
 
 // idk what info is needed yet
 struct RingInfo {
-  std::string_view ring_number;
-  size_t atom;
-  std::string_view bond_token;
+  std::string_view token;
+};
+
+struct BranchInfo {
+    std::string_view token;
+};
+
+struct SepInfo {
 };
 
 struct MolInfo {
@@ -58,17 +62,17 @@ class SmilesASTBuilder {
   void add_atom_charge(int atom_charge);
   void add_atom_map_number(size_t atom_map_number);
 
-  size_t get_num_atoms();
+  void add_branch_info(std::string_view branch_token);
 
-  void add_bond(size_t atom1, size_t atom2,
-                std::string_view bond_token = {"-"});
+  void add_sep_info();
 
-  void add_ring_info(std::string_view ring_number, std::string_view bond_token,
-                     bool use_as_is = false);
+  void add_bond(std::string_view bond_token);
+
+  void add_ring_info(std::string_view ring_number, bool use_as_is = false);
   MolInfo finalize();
 
  private:
-  MolInfo d_mol;
+  std::vector<std::variant<SepInfo, BranchInfo, AtomInfo, BondInfo, RingInfo>> d_events;
 };
 
 std::optional<MolInfo> parse(std::string_view val);
